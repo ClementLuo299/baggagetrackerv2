@@ -8,8 +8,8 @@
     <h2>Register Employee</h2>
     <form action="/register" method="POST">
         @csrf
-        <input type="text" placeholder="name">
-        <input type="password" placeholder="password">
+        <input name = "userID" type="text" placeholder="name">
+        <input name = "password" type="password" placeholder="password">
         <Button>Register</Button>
     </form>
 </body>
