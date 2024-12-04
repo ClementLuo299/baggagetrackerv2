@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('home');
@@ -11,7 +11,9 @@ Route::get('/login', function () {
     return view('home');
 });
 
-Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/register', [UserController::class, 'register']);
+
+Route::post('/logout', [UserController::class, 'logout']);
 
 Route::get('/emplogin', function () {
     return view('employeeregister');

@@ -5,9 +5,22 @@
     <title>Baggage Tracker</title>
 </head>
 <body>
+    @auth
+
+    <p>You are logged in!</p>
+
+    <form action="/logout" method ="POST">
+        @csrf
+        <Button>Logout</Button>
+    </form>
+
+    @else
+
     <h1>Baggage Tracker</h1>
     <h2>Select Your Login</h2>
     <Button>Employee Login</Button>
     <Button>Customer Login</Button>
+
+    @endauth
 </body>
 </html>
