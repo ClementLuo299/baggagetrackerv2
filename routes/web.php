@@ -10,6 +10,10 @@ Route::get('/login', function () {
     return view('home');
 });
 
+Route::post('/register', function () {
+    return 'registered';
+});
+
 Route::get('/emplogin', function () {
     return view('employeeregister');
 });

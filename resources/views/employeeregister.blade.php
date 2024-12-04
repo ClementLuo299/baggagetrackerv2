@@ -6,7 +6,8 @@
 </head>
 <body>
     <h2>Register Employee</h2>
-    <form action="">
+    <form action="/register" method="POST">
+        @csrf
         <input type="text" placeholder="name">
         <input type="password" placeholder="password">
         <Button>Register</Button>
