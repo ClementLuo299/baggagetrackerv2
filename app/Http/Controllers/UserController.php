@@ -23,7 +23,7 @@ class UserController extends Controller
             $request->session()->regenerate();
         }
 
-        return redirect('/');
+        return redirect('/employees');
     }
 
     public function register(Request $request){

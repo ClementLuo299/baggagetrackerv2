@@ -7,11 +7,11 @@
 </head>
 <body>
     <h2>Employee Login</h2>
-    <form action="/" method="POST">
+    <form action="/">
         @csrf
-        <input name = "userID" type="text" placeholder="name">
+        <input name = "name" type="text" placeholder="name">
         <input name = "password" type="password" placeholder="password">
-        <Button>Register</Button>
+        <Button>Login</Button>
     </form>
 </body>
 </html>

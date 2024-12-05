@@ -5,12 +5,19 @@
     <title>Baggage Tracker</title>
 </head>
 <body>
-
     <h1>Baggage Tracker</h1>
     <h2>Select Your Login</h2>
-    <Button>Employee Login</Button>
-    <Button>Customer Login</Button>
 
-    @endauth
+    <div style="margin-bottom: 20px;">
+        <a href="/emplogin">
+            <Button>Employee Login</Button>
+        </a>
+    </div>
+
+    <div>
+        <a href="/login">
+            <Button>Customer Login</Button>
+        </a>
+    </div>
 </body>
 </html>
