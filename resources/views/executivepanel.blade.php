@@ -6,9 +6,9 @@
     <title>Baggage Tracker</title>
 </head>
 <body>
-    <h1>Admin Panel</h1>
+    <h1>Executive Panel</h1>
     <div>
-        <h2>Add Executives</h2>
+        <h2>Add Employees</h2>
     </div>
     <div>
         <form action="/">
@@ -26,9 +26,6 @@
     </div>
     <div>
         <h2>Add Airplanes</h2>
-    </div>
-    <div>
-        <h2>Add Airports</h2>
     </div>
 </body>
 </html>

@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>Employee Login</h2>
-    <form action="/">
+    <form action="/emplogin/submit" method="POST">
         @csrf
         <input name = "name" type="text" placeholder="name">
         <input name = "password" type="password" placeholder="password">

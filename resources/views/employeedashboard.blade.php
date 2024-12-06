@@ -8,7 +8,10 @@
 <body>
     @auth
 
-    <p>You are logged in!</p>
+    <div>
+        <h2>Manage Baggage</h2>
+    </div>
+
 
     <form action="/logout" method ="POST">
         @csrf
@@ -20,6 +23,40 @@
         <input type ="text" name="tracker_id" placeholder="tracker id">
         <Button>Add Baggage</Button>
     </form>
+
+    <div>
+        <h2>Manage Flights</h2>
+    </div>
+
+    <div>
+        <h2>Manage Airplanes</h2>
+    </div>
+
+    <div>
+        <form action="/register-plane" method = "POST">
+            @csrf
+            <input type = "text" name = "registration_no" placeholder="aircraft registration">
+            <input type = "type" name = "type" placeholder="aircraft type">
+            <input type = "capacity" name = "capacity" placeholder="max capacity">
+            <button>Add Airplane</button>
+        </form>
+    </div>
+
+    <div>
+        <h2>Manage Airports</h2>
+    </div>
+
+    <div>
+        <h2>Manage Airlines</h2>
+    </div>
+
+    <div>
+        <h2>Manage Employees</h2>
+    </div>
+
+    <div>
+        <h2>Manage Executives</h2>
+    </div>
 
     @else
 
