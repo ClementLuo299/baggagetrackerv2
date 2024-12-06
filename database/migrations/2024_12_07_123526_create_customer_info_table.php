@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
 
             //passport
-            $table->string('passport_no');
+            $table->string('passport_no')->unique();
 
             //country
             $table->string('country_citizenship');

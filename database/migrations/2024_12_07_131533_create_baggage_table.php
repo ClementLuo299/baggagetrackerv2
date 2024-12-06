@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('baggage', function (Blueprint $table) {
-            $table->string('tracker_id')->primary();
-            $table->string('passport_no')->primary();
-            $table->foreign('passport_no')->references('customer_info')->on('passport_no')->onDelete('cascade');
+            $table->string('tracker_id')->unique();
+            $table->string('passport_no');
+            $table->foreign('passport_no')->references('passport_no')->on('customer_info')->onDelete('cascade');
             $table->string('tracker_type')->nullable();
             $table->string('booking_id');
             $table->foreign('booking_id')->references('booking_id')->on('itinerary')->onDelete('cascade');
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('baggage_weight',10,2)->nullable();
             $table->string('airplane')->nullable();
             $table->foreign('airplane')->references('registration_no')->on('airplane')->onDelete('cascade');
+            $table->primary(['tracker_id','passport_no']);
         });
     }
 

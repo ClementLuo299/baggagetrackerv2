@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('location_update', function (Blueprint $table) {
-            $table->timestampTz('time')->primary();
-            $table->string('tracker_id')->primary();
+            $table->timestampTz('time');
+            $table->string('tracker_id');
+            $table->primary(['tracker_id','time']);
             $table->string('location_name');
-            $table->foreign('name')->references('name')->on('location')->cascadeOnDelete();
+            $table->foreign('location_name')->references('name')->on('location')->cascadeOnDelete();
         });
     }
 

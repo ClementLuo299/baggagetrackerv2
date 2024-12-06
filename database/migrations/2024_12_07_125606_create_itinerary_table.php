@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('itinerary', function (Blueprint $table) {
-            $table->string('booking_id')->primary();
-            $table->string('passport_no')->primary();
+            $table->string('booking_id')->unique();
+            $table->string('passport_no');
+            $table->primary(['booking_id','passport_no']);
             $table->foreign('passport_no')->references('passport_no')->on('customer_info')->onDelete('cascade');
         });
     }

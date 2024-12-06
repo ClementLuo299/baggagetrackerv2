@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('location', function (Blueprint $table) {
             $table->string('name')->primary();
-            $table->string('coordinates')->primary();
+            $table->string('coordinates');
+            $table->string('airport')->nullable();
+            $table->foreign('airport')->references('code')->on('airport')->onDelete('cascade');
+            $table->string('type')->nullable();
         });
     }
 
