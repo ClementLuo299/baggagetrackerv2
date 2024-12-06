@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('airplane', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('registration_no')->primary();
+            $table->string('type')->nullable();
+            $table->integer('capacity');
+            $table->integer('payload');
+            $table->string('airline')->nullable();
+            $table->foreign('airline')->references('name')->on('airline')->onDelete('cascade');
+            $table->string('destination')->nullable();
+            $table->foreign('destination')->references('code')->on('airport')->onDelete('cascade');
+            $table->string('coordinates')->nullable();
         });
     }
 

@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('flight_leg', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('flight_id')->primary();
+            $table->string('airplane')->primary();
+            $table->foreign('airplane')->references('registration_no')->on('airplane')->onDelete('cascade');
+            $table->string('origin')->primary();
+            $table->foreign('origin')->references('code')->on('airport')->onDelete('cascade');
+            $table->string('destination')->primary();
+            $table->foreign('destination')->references('code')->on('airport')->onDelete('cascade');
+            $table->timestampTz('departure_time');
+            $table->timestampTz('arrival_time');
         });
     }
 

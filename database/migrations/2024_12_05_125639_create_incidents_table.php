@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('incidents', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('incident_id')->primary();
+            $table->boolean('is_damaged');
+            $table->boolean('is_lost');
+            $table->boolean('is_delayed');
+            $table->timestampTz('incident_time');
+            $table->boolean('is_resolved');
+            $table->text('description')->nullable();
+            $table->string('location');
+            $table->foreign('location')->references('name')->on('location')->cascadeOnDelete();
         });
     }
 

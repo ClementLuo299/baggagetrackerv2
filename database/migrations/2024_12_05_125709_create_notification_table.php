@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('notification', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('notification_id')->primary();
+            $table->text('content')->nullable();
+            $table->timestampTz('notification_time');
         });
     }
 

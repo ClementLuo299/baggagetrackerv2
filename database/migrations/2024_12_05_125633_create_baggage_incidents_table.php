@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('baggage_incidents', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('tracker_id')->primary();
+            $table->foreign('tracker_id')->references('tracker_id')->on('baggage')->onDelete('cascade');
+            $table->string('incident')->primary();
+            $table->foreign('incident')->references('incident_id')->on('incidents')->onDelete('cascade');
         });
     }
 

@@ -12,17 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('employee_info', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-
             //User to reference
-            $table->unsignedBigInteger('user');
+            $table->unsignedBigInteger('user')->primary();
             $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
 
             //role
+            $table->string('role');
             //airline
+            $table->string('airline')->nullable();
+            $table->foreign('airline')->references('name')->on('airline')->onDelete('cascade');
             //airport
+            $table->string('airport')->nullable();
+            $table->foreign('airport')->references('code')->on('airport')->onDelete('cascade');
             //is_executive
+            $table->boolean('is_exec');
         });
     }
 

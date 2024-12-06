@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('storage_facility', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('name');
+            $table->foreign('name')->references('name')->on('location')->cascadeOnDelete();
+            $table->string('coordinates');
+            $table->foreign('coordinates')->references('coordinates')->on('location')->cascadeOnDelete();
+            $table->string('airport');
+            $table->foreign('airport')->references('code')->on('airport')->onDelete('cascade');
         });
     }
 

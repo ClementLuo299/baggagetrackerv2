@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('itinerary', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('booking_id')->primary();
+            $table->string('passport_no')->primary();
+            $table->foreign('passport_no')->references('passport_no')->on('customer_info')->onDelete('cascade');
         });
     }
 

@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('phone_numbers', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            //User to reference
+            $table->unsignedBigInteger('user')->primary();
+            $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
+
+            $table->string('phone_no');
         });
     }
 

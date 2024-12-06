@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('itinerary_flights', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('booking_id')->primary();
+            $table->foreign('booking_id')->references('booking_id')->on('itinerary')->onDelete('cascade');
+            $table->string('flight_id')->primary();
+            $table->foreign('flight_id')->references('flight_id')->on('flight_leg')->onDelete('cascade');
         });
     }
 

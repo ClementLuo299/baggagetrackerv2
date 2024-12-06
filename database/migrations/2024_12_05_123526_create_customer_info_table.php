@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customer_info', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-
             //User to reference
-            $table->unsignedBigInteger('user');
+            $table->unsignedBigInteger('user')->primary();
             $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
 
             //passport
+            $table->string('passport_no');
+
             //country
+            $table->string('country_citizenship');
         });
     }
 

@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('location', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('name')->primary();
+            $table->string('coordinates')->primary();
+            $table->nullable()->foreign('coordinates')->references('coordinates')->on('airline')->cascadeOnDelete();
         });
     }
 
