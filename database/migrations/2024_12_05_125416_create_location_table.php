@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('location', function (Blueprint $table) {
             $table->string('name')->primary();
             $table->string('coordinates')->primary();
-            $table->nullable()->foreign('coordinates')->references('coordinates')->on('airline')->cascadeOnDelete();
         });
     }
 
