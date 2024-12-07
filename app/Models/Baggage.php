@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Baggage extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['tracker_id'];
+    protected $fillable = ['tracker_id','passport_no','tracker_type','booking_id','is_time_sensitive','is_hazardous',
+                            'baggage_weight'];
+    protected $table = 'baggage';
+    public $timestamps = false;  
 }

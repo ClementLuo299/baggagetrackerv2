@@ -15,9 +15,10 @@ return new class extends Migration
             $table->string('name')->primary();
             $table->string('coordinates');
             $table->string('airport')->nullable();
+            $table->string('airplane')->nullable();
             $table->foreign('airport')->references('code')->on('airport')->onDelete('cascade');
             $table->string('type')->nullable();
-        });
+        });         
     }
 
     /**

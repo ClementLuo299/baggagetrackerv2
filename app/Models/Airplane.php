@@ -8,4 +8,6 @@ class Airplane extends Model
     protected $fillable = ['registration_no','type','capacity','payload'];
     protected $table = 'airplane';
     public $timestamps = false;
+    protected $primaryKey = 'registration_no';
+    public $incrementing = false;
 }

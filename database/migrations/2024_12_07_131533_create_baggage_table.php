@@ -21,8 +21,6 @@ return new class extends Migration
             $table->boolean('is_time_sensitive');
             $table->boolean('is_hazardous');
             $table->decimal('baggage_weight',10,2)->nullable();
-            $table->string('airplane')->nullable();
-            $table->foreign('airplane')->references('registration_no')->on('airplane')->onDelete('cascade');
             $table->primary(['tracker_id','passport_no']);
         });
     }

@@ -19,10 +19,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'user_id',
         'password',
         'fname',
-        'lname'
+        'mname',
+        'lname',
+        'street',
+        'country',
+        'postal_code',
+        'email'
     ];
 
     /**
@@ -47,4 +52,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    protected $table = 'users';
+    public $timestamps = false;
 }

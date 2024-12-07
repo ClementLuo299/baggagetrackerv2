@@ -43,4 +43,32 @@ class UserController extends Controller
         Auth::login($user);
         return redirect('/');
     }
+
+    public function createUser(Request $request) {
+        $incomingFields = $request->validate([
+            'userID' => 'required',
+            'password' => 'required',
+            'fname' => 'required',
+            'mname' => 'required',
+            'lname' => 'required',
+            'street' => 'required',
+            'country' => 'required',
+            'postal_code' => 'required',
+            'email' => 'required',
+        ]);
+
+        $incomingFields['userID'] = strip_tags($incomingFields['userID']);
+        $incomingFields['password'] = strip_tags($incomingFields['password']);
+        $incomingFields['fname'] = strip_tags($incomingFields['fname']);
+        $incomingFields['mname'] = strip_tags($incomingFields['mname']);
+        $incomingFields['lname'] = strip_tags($incomingFields['lname']);
+        $incomingFields['street'] = strip_tags($incomingFields['street']);
+        $incomingFields['country'] = strip_tags($incomingFields['country']);
+        $incomingFields['postal_code'] = strip_tags($incomingFields['postal_code']);
+        $incomingFields['email'] = strip_tags($incomingFields['email']);
+
+        User::create($incomingFields);
+        return redirect('/employees');
+    //
+    }
 }
