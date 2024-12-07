@@ -43,6 +43,26 @@
     </div>
 
     <div>
+        <h3>Airplanes</h3>
+        @foreach($airplanes as $airplane)
+        <div style="border:3px solid black; padding:10px; margin: 10px">
+            <h4>{{$airplane['registration_no']}}</h4>
+            Aircraft type: {{$airplane['type']}},
+            Max capacity: {{$airplane['capacity']}},
+            Current payload: {{$airplane['payload']}}
+            <form action="/edit-plane/{{$airplane->registration_no}}">
+                <button>Edit</button>
+            </form>
+            <form action="/delete-plane/{{$airplane->registration_no}}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button>Delete</button>
+            </form>
+        </div>
+        @endforeach
+    </div>
+
+    <div>
         <h2>Manage Airports</h2>
     </div>
 
