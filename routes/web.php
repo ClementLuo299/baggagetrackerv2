@@ -1,14 +1,25 @@
 <?php
 
+use App\Models\Airline;
 use App\Models\Airport;
+use App\Models\Baggage;
 use App\Models\Airplane;
+use App\Models\Customer;
+use App\Models\Employee;
+use App\Models\Incident;
+use App\Models\Location;
+use App\Models\FlightLeg;
+use App\Models\Itinerary;
+use App\Models\Notification;
+use App\Models\BaggageIncidents;
+use App\Models\ItineraryFlights;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AirlineController;
 use App\Http\Controllers\AirportController;
-
 use App\Http\Controllers\BaggageController;
 use App\Http\Controllers\AirplaneController;
 use App\Http\Controllers\CustomerController;
@@ -46,7 +57,21 @@ Route::post('/emplogin/submit', [UserController::class, 'login']);
 Route::get('/employees', function () {
     $airplanes = Airplane::all();
     $airports = Airport::all();
-    return view('employeedashboard', ['airplanes' => $airplanes, 'airports'=>$airports]);
+    $customers = Customer::all();
+    $itineraries = Itinerary::all();
+    $employees = Employee::all();
+    $airlines = Airline::all();
+    $locations = Location::all();
+    $flights = FlightLeg::all();
+    $itineraryFlights = ItineraryFlights::all();
+    $baggages = Baggage::all();
+    $incidents = Incident::all();
+    $baggageIncidents = BaggageIncidents::all();
+    $notifications = Notification::all();
+    return view('employeedashboard', ['airplanes' => $airplanes, 'airports'=>$airports, 'customers'=>$customers
+    , 'itineraries'=>$itineraries, 'employees'=>$employees, 'airlines'=>$airlines, 'locations'=>$locations
+    , 'flights'=>$flights, 'itineraryFlights'=>$itineraryFlights, 'baggages'=>$baggages, 'incidents'=>$incidents
+    , 'baggageIncidents'=>$baggageIncidents, 'notifications'=>$notifications]);
 });
 
 //Customer related routes
