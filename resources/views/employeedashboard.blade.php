@@ -21,19 +21,44 @@
         </div>
 
         <div>
-            <form action="/register-customer" method = "POST">
+            <form action="/register-customer" method="POST">
                 @csrf
-                <input type = "text" name = "fname" placeholder= "first name">
-                <input type = "text" name = "mname" placeholder="middle name">
-                <input type = "text" name = "lname" placeholder="last name">
-                <input type = "text" name = "street" placeholder="street">
-                <input type = "text" name = "country" placeholder="country">
-                <input type = "text" name = "postal_code" placeholder="postal code">
-                <input type = "text" name = "email" placeholder="email">
-                <input type = "text" name = "passport_no" placeholder="passport no">
-                <input type = "text" name = "country_citizenship" placeholder="country of citizenship">
+                <input type="text" name="fname" placeholder="first name">
+                <input type="text" name="mname" placeholder="middle name">
+                <input type="text" name="lname" placeholder="last name">
+                <input type="text" name="street" placeholder="street">
+                <input type="text" name="country" placeholder="country">
+                <input type="text" name="postal_code" placeholder="postal code">
+                <input type="text" name="email" placeholder="email">
+                <input type="text" name="passport_no" placeholder="passport no">
+                <input type="text" name="country_citizenship" placeholder="country of citizenship">
                 <button>Add Customer</button>
             </form>
+        </div>
+
+        <div>
+            <h3>Customers</h3>
+            @foreach($customers as $customer)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>{{$customer->fname}} {{$customer->lname}}</h4>
+                Passport No: {{$customer['passport_no']}},
+                Country Citizenship: {{$customer['country_citizenship']}},
+                Email: {{$customer['email']}},
+                Street: {{$customer['street']}},
+                Country: {{$customer['country']}},
+                Postal Code: {{$customer['postal_code']}}
+
+                <form action="/edit-customer/{{$customer->id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-customer/{{$customer->id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
         </div>
     </div>
 
@@ -44,13 +69,34 @@
         </div>
 
         <div>
-            <form action="/register-itinerary" method = "POST">
+            <form action="/register-itinerary" method="POST">
                 @csrf
-                <input type = "text" name = "booking_id" placeholder="customer booking id">
-                <input type = "text" name = "passport_no" placeholder="customer passport no">
+                <input type="text" name="booking_id" placeholder="customer booking id">
+                <input type="text" name="passport_no" placeholder="customer passport no">
                 <button>Add Itinerary</button>
             </form>
         </div>
+
+        <div>
+            <h3>Itineraries</h3>
+            @foreach($itineraries as $itinerary)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>{{$itinerary->booking_id}}</h4>
+                Customer Passport No: {{$itinerary['passport_no']}}
+
+                <form action="/edit-itinerary/{{$itinerary->booking_id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-itinerary/{{$itinerary->booking_id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
     </div>
 
     <!-- Manage Employees -->
@@ -58,37 +104,85 @@
         <div>
             <h2>Manage Employees</h2>
         </div>
-    
+
         <div>
-            <form action="/register-employee" method = "POST">
+            <form action="/register-employee" method="POST">
                 @csrf
-                <input type = "text" name = "name" placeholder="username">
-                <input type = "text" name = "password" placeholder="password">
-                <input type = "text" name = "fname" placeholder="first name">
-                <input type = "text" name = "lname" placeholder="last name">
-                <input type = "text" name = "role" placeholder="employee role">         
-                <input type = "text" name = "airline" placeholder="employee airline">         
-    
+                <input type="text" name="name" placeholder="username">
+                <input type="text" name="password" placeholder="password">
+                <input type="text" name="fname" placeholder="first name">
+                <input type="text" name="lname" placeholder="last name">
+                <input type="text" name="role" placeholder="employee role">
+                <input type="text" name="airline" placeholder="employee airline">
+
                 <button>Add Employee</button>
             </form>
         </div>
+
+        <div>
+            <h3>Employees</h3>
+            @foreach($employees as $employee)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>{{$employee->name}}</h4>
+                First Name: {{$employee['fname']}},
+                Last Name: {{$employee['lname']}},
+                Role: {{$employee['role']}},
+                Airline: {{$employee['airline']}}
+
+                <form action="/edit-employee/{{$employee->name}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-employee/{{$employee->name}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
     </div>
+
 
     <!-- Manage Airlines -->
     <div>
         <div>
             <h2>Manage Airlines</h2>
         </div>
-    
+
         <div>
-            <form action="/register-airline" method = "POST">
+            <form action="/register-airline" method="POST">
                 @csrf
-                <input type = "text" name = "name" placeholder="airline name">
-                <input type = "text" name = "country_of_origin" placeholder="airline country of origin">         
+                <input type="text" name="name" placeholder="airline name">
+                <input type="text" name="country_of_origin" placeholder="airline country of origin">
+
                 <button>Add Airline</button>
             </form>
-        </div>         
+        </div>
+
+        <div>
+            <h3>Airlines</h3>
+            @foreach($airlines as $airline)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>{{$airline->name}}</h4>
+                Country of Origin: {{$airline['country_of_origin']}}
+
+                <form action="/edit-airline/{{$airline->id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-airline/{{$airline->id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
     </div>
+
 
     <!-- Manage Airports -->
     <div>
@@ -136,17 +230,41 @@
         </div>
 
         <div>
-            <form action="/register-location" method = "POST">
+            <form action="/register-location" method="POST">
                 @csrf
-                <input type = "text" name = "name" placeholder="location name">
-                <input type = "text" name = "coordinates" placeholder="location coordinates">         
-                <input type = "text" name = "airport" placeholder="airport code if in airport">
-                <input type = "text" name = "airplane" placeholder="airplane registration_no if in airplane">
-                <input type = "text" name = "type" placeholder="location type (e.g., baggage carousell)">       
+                <input type="text" name="name" placeholder="location name">
+                <input type="text" name="coordinates" placeholder="location coordinates">
+                <input type="text" name="airport" placeholder="airport code if in airport">
+                <input type="text" name="airplane" placeholder="airplane registration_no if in airplane">
+                <input type="text" name="type" placeholder="location type (e.g., baggage carousell)">
 
                 <button>Add Location</button>
             </form>
         </div>
+
+        <div>
+            <h3>Locations</h3>
+            @foreach($locations as $location)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>{{$location->name}}</h4>
+                Coordinates: {{$location['coordinates']}},
+                Airport: {{$location['airport']}},
+                Airplane: {{$location['airplane']}},
+                Type: {{$location['type']}}
+
+                <form action="/edit-location/{{$location->id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-location/{{$location->id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
     </div>
     
     <!-- Manage Airplanes -->
@@ -205,133 +323,278 @@
                 <button>Add Flight Leg</button>
             </form>
         </div>
+
+        <div>
+            <h3>Flights</h3>
+            @foreach($flights as $flight)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>{{$flight->flight_id}}</h4>
+                Airplane ID: {{$flight['airplane']}},
+                Origin Airport ID: {{$flight['origin']}},
+                Destination Airport ID: {{$flight['destination']}}
+                Departure Time: {{$flight['departure_time']}}
+                Arrival Time: {{$flight['arrival_time']}}
+
+                <form action="/edit-flight/{{$flight->flight_id}}" method = "POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-flight/{{$flight->flight_id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
     </div>
 
-    <!--Manage Itinerary Flights-->
+    <!-- Manage Itinerary Flights -->
     <div>
         <div>
             <h2>Manage Itinerary Flights</h2>
         </div>
 
         <div>
-            <form action="/register-itinerary-flight" method = "POST">
+            <form action="/register-itinerary-flight" method="POST">
                 @csrf
-                <input type = "text" name = "booking_id" placeholder="customer booking id">
-                <input type = "text" name = "flight_id" placeholder="flight_id">
+                <input type="text" name="booking_id" placeholder="customer booking id">
+                <input type="text" name="flight_id" placeholder="flight_id">
                 <button>Add Itinerary Flight</button>
             </form>
         </div>
-    </div>    
-    
+
+        <div>
+            <h3>Itinerary Flights</h3>
+            @foreach($itineraryFlights as $itineraryFlight)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Booking ID: {{$itineraryFlight->booking_id}}</h4>
+                Flight ID: {{$itineraryFlight['flight_id']}}
+
+                <form action="/edit-itinerary-flight/{{$itineraryFlight->id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-itinerary-flight/{{$itineraryFlight->id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
+    </div>
+
     <!-- Manage Baggage -->
     <div>
         <div>
             <h2>Manage Baggage</h2>
         </div>
-    
+
         <div>
-            <form action="/baggage-check-in" method ="POST">
+            <form action="/baggage-check-in" method="POST">
                 @csrf
-                <input type ="text" name="tracker_id" placeholder="baggage tracker id">
-                <input type ="text" name="passport_no" placeholder="customer passport no">
-                <input type ="text" name="tracker_type" placeholder="tracker type">
-                <input type ="text" name="booking_id" placeholder="booking id">
-    
+                <input type="text" name="tracker_id" placeholder="baggage tracker id">
+                <input type="text" name="passport_no" placeholder="customer passport no">
+                <input type="text" name="tracker_type" placeholder="tracker type">
+                <input type="text" name="booking_id" placeholder="booking id">
+
                 <!-- Dropdown for boolean -->
                 <select name="is_time_sensitive">
                     <option value="" disabled selected>Is the baggage time sensitive?</option>
                     <option value="1">Yes</option>
                     <option value="0">No</option>
-                </select>       
-                
+                </select>
+
                 <select name="is_hazardous">
                     <option value="" disabled selected>Is the baggage hazardous?</option>
                     <option value="1">Yes</option>
                     <option value="0">No</option>
-                </select> 
-    
-                <input type ="text" name="baggage_weight" placeholder="baggage weight">
-    
-                <Button>Add Baggage</Button>
+                </select>
+
+                <input type="text" name="baggage_weight" placeholder="baggage weight">
+
+                <button>Add Baggage</button>
             </form>
         </div>
+
+        <div>
+            <h3>Baggage</h3>
+            @foreach($baggages as $baggage)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Tracker ID: {{$baggage->tracker_id}}</h4>
+                Passport No: {{$baggage['passport_no']}},
+                Tracker Type: {{$baggage['tracker_type']}},
+                Booking ID: {{$baggage['booking_id']}},
+                Time Sensitive: {{$baggage['is_time_sensitive'] == 1 ? 'Yes' : 'No'}},
+                Hazardous: {{$baggage['is_hazardous'] == 1 ? 'Yes' : 'No'}},
+                Baggage Weight: {{$baggage['baggage_weight']}}
+
+                <form action="/edit-baggage/{{$baggage->tracker_id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-baggage/{{$baggage->tracker_id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
     </div>
-     
+
     <!-- Manage Incidents -->
     <div>
         <div>
             <h2>Incidents</h2>
         </div>
-    
+
         <div>
-            <form action="/register-incident" method = "POST">
+            <form action="/register-incident" method="POST">
                 @csrf
-                <input type = "text" name = "incident_id" placeholder="incident id">
-            <!-- Dropdown for boolean -->
-            <select name="is_damaged">
-                <option value="" disabled selected>Is the baggage damaged?</option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select>       
-            
-            <select name="is_lost">
-                <option value="" disabled selected>Is the baggage lost?</option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select> 
-    
-            <select name="is_delayed">
-                <option value="" disabled selected>Is the baggage delayed?</option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select> 
-    
-            <select name="is_resolved">
-                <option value="" disabled selected>Is the incident resolved?</option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select> 
-            
-            <input type = "datetime-local" name = "incident_time" placeholder="time of incident">
-            <input type = "text" name = "description" placeholder="description of incident">
-            <input type = "text" name = "location" placeholder="location of incident">
+                <input type="text" name="incident_id" placeholder="incident id">
+
+                <!-- Dropdown for boolean -->
+                <select name="is_damaged">
+                    <option value="" disabled selected>Is the baggage damaged?</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+
+                <select name="is_lost">
+                    <option value="" disabled selected>Is the baggage lost?</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+
+                <select name="is_delayed">
+                    <option value="" disabled selected>Is the baggage delayed?</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+
+                <select name="is_resolved">
+                    <option value="" disabled selected>Is the incident resolved?</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+
+                <input type="datetime-local" name="incident_time" placeholder="time of incident">
+                <input type="text" name="description" placeholder="description of incident">
+                <input type="text" name="location" placeholder="location of incident">
+
                 <button>Add Incident</button>
             </form>
         </div>
 
+        <div>
+            <h3>Incident Records</h3>
+            @foreach($incidents as $incident)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Incident ID: {{$incident->incident_id}}</h4>
+                Damaged: {{$incident['is_damaged'] == 1 ? 'Yes' : 'No'}},
+                Lost: {{$incident['is_lost'] == 1 ? 'Yes' : 'No'}},
+                Delayed: {{$incident['is_delayed'] == 1 ? 'Yes' : 'No'}},
+                Resolved: {{$incident['is_resolved'] == 1 ? 'Yes' : 'No'}},
+                Incident Time: {{$incident['incident_time']}},
+                Description: {{$incident['description']}},
+                Location: {{$incident['location']}}
+
+                <form action="/edit-incident/{{$incident->incident_id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-incident/{{$incident->incident_id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
     </div>
-    
+
     <!-- Manage Baggage Incidents -->
     <div>
         <div>
             <h2>Manage Baggage Incidents</h2>
         </div>
-    
+
         <div>
-            <form action="/register-baggage-incidents" method = "POST">
+            <form action="/register-baggage-incidents" method="POST">
                 @csrf
-                <input type = "text" name = "tracker_id" placeholder="baggage tracker id">
-                <input type = "text" name = "incident" placeholder="incident id">         
+                <input type="text" name="tracker_id" placeholder="baggage tracker id">
+                <input type="text" name="incident" placeholder="incident id">
+
                 <button>Add Baggage Incident</button>
             </form>
-        </div>         
+        </div>
+
+        <div>
+            <h3>Baggage Incident Records</h3>
+            @foreach($baggageIncidents as $baggageIncident)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Baggage Incident ID: {{$baggageIncident->id}}</h4>
+                Tracker ID: {{$baggageIncident['tracker_id']}},
+                Incident ID: {{$baggageIncident['incident']}}
+                
+                <form action="/edit-baggage-incident/{{$baggageIncident->id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-baggage-incident/{{$baggageIncident->id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
     </div>
 
     <!-- Manage Notifications -->
     <div>
         <div>
-            <h2>Notification</h2>
+            <h2>Manage Notifications</h2>
+        </div>
+
         <div>
-    
-        <div>
-            <form action="/register-notification" method = "POST">
+            <form action="/register-notification" method="POST">
                 @csrf
-                <input type = "text" name = "notification_id" placeholder="notification id">
-                <input type = "text" name = "content" placeholder="notification content">
-                <input type = "datetime-local" name = "notification_time" placeholder="time of notification">
+                <input type="text" name="notification_id" placeholder="notification id">
+                <input type="text" name="content" placeholder="notification content">
+                <input type="datetime-local" name="notification_time" placeholder="time of notification">
                 <button>Add Notification</button>
             </form>
         </div>
+
+        <div>
+            <h3>Notification Records</h3>
+            @foreach($notifications as $notification)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Notification ID: {{$notification->notification_id}}</h4>
+                Content: {{$notification['content']}},
+                Notification Time: {{$notification['notification_time']}}
+                
+                <form action="/edit-notification/{{$notification->notification_id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+                <form action="/delete-notification/{{$notification->notification_id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+
     </div>
         
     <!-- Manage Executives -->

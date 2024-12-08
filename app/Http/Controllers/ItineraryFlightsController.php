@@ -20,4 +20,28 @@ class ItineraryFlightsController extends Controller
         return redirect('/employees');
     //
     }
+
+    public function showEditScreen(ItineraryFlights $itineraryFlight) {
+        return view('edit-itinerary-flight', ['itineraryFlight' => $itineraryFlight]);
+    }
+    
+    public function updateItineraryFlight(ItineraryFlights $itineraryFlight, Request $request) {
+        $incomingFields = $request->validate([
+            'booking_id' => 'required',
+            'flight_id' => 'required',
+        ]);
+    
+        $incomingFields['booking_id'] = strip_tags($incomingFields['booking_id']);
+        $incomingFields['flight_id'] = strip_tags($incomingFields['flight_id']);
+    
+        $itineraryFlight->update($incomingFields);
+    
+        return redirect('/employees');
+    }
+    
+    public function deleteItineraryFlight(ItineraryFlights $itineraryFlight) {
+        $itineraryFlight->delete();
+        return redirect('/employees');
+    }
+    
 }
