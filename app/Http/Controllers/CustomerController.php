@@ -13,6 +13,7 @@ class CustomerController extends Controller
     $incomingFields = $request->validate([
         'fname' => 'required',
         'lname' => 'required',
+        'mname' => 'nullable',
         'passport_no' => 'required',
         'country_citizenship' => 'required',
     ]);
@@ -20,7 +21,7 @@ class CustomerController extends Controller
     $incomingFields['passport_no'] = strip_tags($incomingFields['passport_no']);
     $incomingFields['country_citizenship'] = strip_tags($incomingFields['country_citizenship']);
 
-    User::create([
+    $user = User::create([
         'name'=>$incomingFields['fname'],
         'password'=>Hash::make($incomingFields['passport_no']),
         'fname'=>$incomingFields['fname'],
@@ -30,7 +31,7 @@ class CustomerController extends Controller
     $id = DB::getPdo()->lastInsertId();
 
     Customer::create([
-        'user'=>$id,
+        'user'=>$user['id'],
         'passport_no'=>$incomingFields['passport_no'],
         'country_citizenship' => $incomingFields['country_citizenship']
     ]);
@@ -38,36 +39,45 @@ class CustomerController extends Controller
     }
 
     // Show the edit screen for a specific Customer
-    public function showEditScreen(Customer $customer) {
-        return view('edit-customer', ['customer' => $customer]);
+    public function showEditScreen($id) {
+        $user = User::with('customer')->findOrFail($id);
+        return view('edit-customers', compact('user'));
     }
 
     // Update an existing Customer
-    public function updateCustomer(Customer $customer, Request $request) {
+    public function updateCustomer(Request $request, $id) {
         $incomingFields = $request->validate([
             'fname' => 'required',
             'lname' => 'required',
+            'mname' => 'nullable',
+            'street' => 'nullable',
+            'country' => 'nullable',
+            'postal_code' => 'nullable',
+            'email' => 'nullable',
             'passport_no' => 'required',
             'country_citizenship' => 'required',
         ]);
 
-        $incomingFields['passport_no'] = strip_tags($incomingFields['passport_no']);
-        $incomingFields['country_citizenship'] = strip_tags($incomingFields['country_citizenship']);
+        $user = User::findOrFail($id);
 
         // Update related User record
-        $user = User::find($customer->user);
         $user->update([
-            'name' => $incomingFields['fname'],
+            'name'=>$incomingFields['fname'],
             'password' => Hash::make($incomingFields['passport_no']),
             'fname' => $incomingFields['fname'],
-            'lname' => $incomingFields['lname']
+            'lname' => $incomingFields['lname'],
+            'mname' => $incomingFields['mname'],
+            'street' => $incomingFields['street'],
+            'country' => $incomingFields['country'],
+            'postal_code' => $incomingFields['postal_code'],
+            'email' => $incomingFields['email']
         ]);
 
         // Update Customer record
-        $customer->update([
+        $user->customer->update([
             'passport_no' => $incomingFields['passport_no'],
             'country_citizenship' => $incomingFields['country_citizenship']
-        ]);
+        ]); 
 
         return redirect('/employees');
     }

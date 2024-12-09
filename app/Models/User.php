@@ -30,6 +30,14 @@ class User extends Authenticatable
         'email'
     ];
 
+    public function customer(){
+        return $this->hasOne(Customer::class,'user','id');
+    }
+
+    public function employee(){
+        return $this->hasOne(Employee::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

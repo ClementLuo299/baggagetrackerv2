@@ -38,26 +38,31 @@
 
         <div>
             <h3>Customers</h3>
-            @foreach($customers as $customer)
+            @foreach($users as $user)
+            @if($user->customer)
             <div style="border:3px solid black; padding:10px; margin: 10px">
-                <h4>{{$customer->fname}} {{$customer->lname}}</h4>
-                Passport No: {{$customer['passport_no']}},
-                Country Citizenship: {{$customer['country_citizenship']}},
-                Email: {{$customer['email']}},
-                Street: {{$customer['street']}},
-                Country: {{$customer['country']}},
-                Postal Code: {{$customer['postal_code']}}
+                <div>
+                    <h4>{{$user->fname}}</h4>
+                    <h4>{{$user->lname}}</h4>
+                </div>
+                Passport No: {{$user->customer->passport_no}},
+                Country Citizenship: {{$user->customer->country_citizenship}},
+                Email: {{$user->email}},
+                Street: {{$user->street}},
+                Country: {{$user->country}},
+                Postal Code: {{$user->postal_code}}
 
-                <form action="/edit-customer/{{$customer->id}}" method="POST">
+                <form action="/edit-customer/{{$user->id}}" method="POST">
                     @csrf
                     <button>Edit</button>
                 </form>
-                <form action="/delete-customer/{{$customer->id}}" method="POST">
+                <form action="/delete-customer/{{$user->id}}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button>Delete</button>
                 </form>
             </div>
+            @endif
             @endforeach
         </div>
     </div>
@@ -82,13 +87,9 @@
             @foreach($itineraries as $itinerary)
             <div style="border:3px solid black; padding:10px; margin: 10px">
                 <h4>{{$itinerary->booking_id}}</h4>
-                Customer Passport No: {{$itinerary['passport_no']}}
+                Customer Passport No: {{$itinerary->passport_no}}
 
-                <form action="/edit-itinerary/{{$itinerary->booking_id}}" method="POST">
-                    @csrf
-                    <button>Edit</button>
-                </form>
-                <form action="/delete-itinerary/{{$itinerary->booking_id}}" method="POST">
+                <form action="{{ route('itineraries.destroy', ['booking_id'=>$itinerary->booking_id, 'passport_no'=>$itinerary->passport_no]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button>Delete</button>
@@ -447,6 +448,50 @@
 
     </div>
 
+    <!-- Manage Location Updates -->
+    <div>
+        <div>
+            <h2>Manage Location Updates</h2>
+        </div>
+
+        <!-- Add Location Update Form -->
+        <div>
+            <form action="/register-location-update" method="POST">
+                @csrf
+                <input type="datetime-local" name="time" placeholder="Time of update">
+                <input type="text" name="tracker_id" placeholder="Tracker ID">
+                <input type="text" name="location_name" placeholder="Location Name">
+                <button>Add Location Update</button>
+            </form>
+        </div>
+
+        <!-- Location Update Records -->
+        <div>
+            <h3>Location Update Records</h3>
+            @foreach($locationUpdates as $locationUpdate)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Time: {{$locationUpdate->time}}</h4>
+                Tracker ID: {{$locationUpdate->tracker_id}},
+                Location Name: {{$locationUpdate->location_name}}
+
+                <!-- Edit Button -->
+                <form action="/edit-location-update/{{$locationUpdate->id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+
+                <!-- Delete Button -->
+                <form action="/delete-location-update/{{$locationUpdate->id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+
     <!-- Manage Incidents -->
     <div>
         <div>
@@ -558,6 +603,89 @@
 
     </div>
 
+    <!-- Manage Incident Employees -->
+    <div>
+        <div>
+            <h2>Manage Incident Employees</h2>
+        </div>
+
+        <!-- Add Incident Employee Form -->
+        <div>
+            <form action="/register-incident-employee" method="POST">
+                @csrf
+                <input type="text" name="incident_id" placeholder="Incident ID">
+                <input type="text" name="employee" placeholder="Employee">
+                <button>Add Incident Employee</button>
+            </form>
+        </div>
+
+        <!-- Incident Employee Records -->
+        <div>
+            <h3>Incident Employee Records</h3>
+            @foreach($incidentEmployees as $incidentEmployee)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Incident ID: {{$incidentEmployee->incident_id}}</h4>
+                Employee: {{$incidentEmployee->employee}}
+
+                <!-- Edit Button -->
+                <form action="/edit-incident-employee/{{$incidentEmployee->id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+
+                <!-- Delete Button -->
+                <form action="/delete-incident-employee/{{$incidentEmployee->id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- Manage Notification Subject -->
+    <div>
+        <div>
+            <h2>Manage Notification Subject</h2>
+        </div>
+
+        <!-- Add Notification Subject Form -->
+        <div>
+            <form action="/register-notification-subject" method="POST">
+                @csrf
+                <input type="text" name="notification_id" placeholder="Notification ID">
+                <input type="text" name="tracker_id" placeholder="Baggage Tracker ID">
+                <button>Add Notification Subject</button>
+            </form>
+        </div>
+
+        <!-- Notification Subject Records -->
+        <div>
+            <h3>Notification Subject Records</h3>
+            @foreach($notificationSubjects as $notificationSubject)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Notification ID: {{$notificationSubject->notification_id}}</h4>
+                Tracker ID: {{$notificationSubject->tracker_id}}
+
+                <!-- Edit Button -->
+                <form action="/edit-notification-subject/{{$notificationSubject->id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+
+                <!-- Delete Button -->
+                <form action="/delete-notification-subject/{{$notificationSubject->id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+
     <!-- Manage Notifications -->
     <div>
         <div>
@@ -594,9 +722,52 @@
             </div>
             @endforeach
         </div>
-
     </div>
-        
+
+
+    <!-- Manage Notification Sent -->
+    <div>
+        <div>
+            <h2>Manage Notification Sent</h2>
+        </div>
+
+        <!-- Add Notification Sent Form -->
+        <div>
+            <form action="/register-notification-sent" method="POST">
+                @csrf
+                <input type="text" name="notification_id" placeholder="Notification ID">
+                <input type="text" name="recipient" placeholder="Recipient (Customer Passport No)">
+                <input type="text" name="sender" placeholder="Sender (Employee User ID)">
+                <button>Add Notification Sent</button>
+            </form>
+        </div>
+
+        <!-- Notification Sent Records -->
+        <div>
+            <h3>Notification Sent Records</h3>
+            @foreach($notificationSents as $notificationSent)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Notification ID: {{$notificationSent->notification_id}}</h4>
+                Recipient: {{$notificationSent->recipient}},
+                Sender: {{$notificationSent->sender}}
+
+                <!-- Edit Button -->
+                <form action="/edit-notification-sent/{{$notificationSent->id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+
+                <!-- Delete Button -->
+                <form action="/delete-notification-sent/{{$notificationSent->id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
     <!-- Manage Executives -->
     <div>
         <h2>Manage Executives</h2>

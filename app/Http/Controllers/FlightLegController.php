@@ -62,4 +62,3 @@ class FlightLegController extends Controller
         return redirect('/employees');
     }
 }
-}

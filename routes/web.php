@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Models\Airline;
 use App\Models\Airport;
 use App\Models\Baggage;
@@ -11,9 +12,14 @@ use App\Models\Location;
 use App\Models\FlightLeg;
 use App\Models\Itinerary;
 use App\Models\Notification;
+use App\Models\LocationUpdate;
+
 use App\Models\BaggageIncidents;
 use App\Models\ItineraryFlights;
-
+use App\Models\NotificationSent;
+use App\Models\IncidentEmployees;
+use Illuminate\Support\Facades\DB;
+use App\Models\NotificationSubject;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -57,34 +63,40 @@ Route::post('/emplogin/submit', [UserController::class, 'login']);
 Route::get('/employees', function () {
     $airplanes = Airplane::all();
     $airports = Airport::all();
-    $customers = Customer::all();
+    $users = User::all();
     $itineraries = Itinerary::all();
     $employees = Employee::all();
     $airlines = Airline::all();
     $locations = Location::all();
+    $locationUpdates = LocationUpdate::all();
+    $incidentEmployees = IncidentEmployees::all();
     $flights = FlightLeg::all();
     $itineraryFlights = ItineraryFlights::all();
     $baggages = Baggage::all();
     $incidents = Incident::all();
     $baggageIncidents = BaggageIncidents::all();
     $notifications = Notification::all();
-    return view('employeedashboard', ['airplanes' => $airplanes, 'airports'=>$airports, 'customers'=>$customers
+    $notificationSubjects = NotificationSubject::all();
+    $notificationSents = NotificationSent::all();
+    return view('employeedashboard', ['users'=>$users,  'airplanes' => $airplanes, 'airports'=>$airports 
     , 'itineraries'=>$itineraries, 'employees'=>$employees, 'airlines'=>$airlines, 'locations'=>$locations
     , 'flights'=>$flights, 'itineraryFlights'=>$itineraryFlights, 'baggages'=>$baggages, 'incidents'=>$incidents
-    , 'baggageIncidents'=>$baggageIncidents, 'notifications'=>$notifications]);
+    , 'baggageIncidents'=>$baggageIncidents, 'notifications'=>$notifications, 'locationUpdates'=>$locationUpdates
+    , 'incidentEmployees'=>$incidentEmployees, 'notificationSubjects'=>$notificationSubjects
+    , 'notificationSents'=>$notificationSents]);
 });
 
 //Customer related routes
 Route::post('/register-customer', [CustomerController::class, 'createCustomer']);
-Route::post('/edit-customer/{customer}', [CustomerController::class, 'showEditScreen']);
-Route::put('/edit-customer/{customer}', [CustomerController::class, 'updateCustomer']);
+Route::post('/edit-customer/{user}', [CustomerController::class, 'showEditScreen']);
+Route::put('/edit-customer/{user}', [CustomerController::class, 'updateCustomer']);
 Route::delete('/delete-customer/{customer}', [CustomerController::class, 'deleteCustomer']);
 
 //Itinerary related routes
 Route::post('/register-itinerary', [ItineraryController::class, 'createItinerary']);
-Route::post('/edit-itinerary/{itinerary}', [ItineraryController::class, 'showEditScreen']);
-Route::put('/edit-itinerary/{itinerary}', [ItineraryController::class, 'updateItinerary']);
-Route::delete('/delete-itinerary/{itinerary}', [ItineraryController::class, 'deleteItinerary']);
+//Route::post('/edit-itinerary/{booking_id}', [ItineraryController::class, 'showEditScreen']);
+//Route::put('/edit-itinerary/{booking_id}', [ItineraryController::class, 'updateItinerary']);
+Route::delete('/delete-itinerary/{booking_id}/{passport_no}', [ItineraryController::class, 'deleteItinerary'])->name('itineraries.destroy');
 
 //Employee related routes
 Route::post('/register-employee', [EmployeeController::class, 'createEmployee']);
@@ -134,11 +146,23 @@ Route::post('/edit-baggage/{baggage}', [BaggageController::class, 'showEditScree
 Route::put('/edit-baggage/{baggage}', [BaggageController::class, 'updateBaggage']);
 Route::delete('/delete-baggage/{baggage}', [BaggageController::class, 'deleteBaggage']);
 
+// Location Update related Routes
+Route::post('/register-location-update', [LocationUpdateController::class, 'createLocationUpdate']);
+Route::get('/edit-location-update/{locationUpdate}', [LocationUpdateController::class, 'showEditScreen']);
+Route::put('/edit-location-update/{locationUpdate}', [LocationUpdateController::class, 'updateLocationUpdate']);
+Route::delete('/delete-location-update/{locationUpdate}', [LocationUpdateController::class, 'deleteLocationUpdate']);
+
 //Incident related routes
 Route::post('/register-incident', [IncidentController::class, 'createIncident']);
 Route::post('/edit-incident/{incident}', [IncidentController::class, 'showEditScreen']);
 Route::put('/edit-incident/{incident}', [IncidentController::class, 'updateIncident']);
 Route::delete('/delete-incident/{incident}', [IncidentController::class, 'deleteIncident']);
+
+//Incident Employees routes
+Route::post('/register-incident-employee', [IncidentEmployeesController::class, 'createIncidentEmployees']);
+Route::get('/edit-incident-employee/{incidentEmployee}', [IncidentEmployeesController::class, 'showEditScreen']);
+Route::put('/edit-incident-employee/{incidentEmployee}', [IncidentEmployeesController::class, 'updateIncidentEmployees']);
+Route::delete('/delete-incident-employee/{incidentEmployee}', [IncidentEmployeesController::class, 'deleteIncidentEmployees']);
 
 //Baggage Incidents related routes
 Route::post('/register-baggage-incidents', [BaggageIncidentsController::class, 'createBaggageIncidents']);
@@ -146,11 +170,23 @@ Route::post('/edit-baggage-incidents/{baggageIncidents}', [BaggageIncidentsContr
 Route::put('/edit-baggage-incidents/{baggageIncidents}', [BaggageIncidentsController::class, 'updateBaggageIncidents']);
 Route::delete('/delete-baggage-incidents/{baggageIncidents}', [BaggageIncidentsController::class, 'deleteBaggageIncidents']);
 
+// Notification Subject related routes
+Route::post('/register-notification-subject', [NotificationSubjectController::class, 'createNotificationSubject']);
+Route::get('/edit-notification-subject/{notificationSubject}', [NotificationSubjectController::class, 'showEditScreen']);
+Route::put('/edit-notification-subject/{notificationSubject}', [NotificationSubjectController::class, 'updateNotificationSubject']);
+Route::delete('/delete-notification-subject/{notificationSubject}', [NotificationSubjectController::class, 'deleteNotificationSubject']);
+
 //Notifications related routes
 Route::post('/register-notification', [NotificationController::class, 'createNotification']);
 Route::post('/edit-notification/{notification}', [NotificationController::class, 'showEditScreen']);
 Route::put('/edit-notification/{notification}', [NotificationController::class, 'updateNotification']);
 Route::delete('/delete-notification/{notification}', [NotificationController::class, 'deleteNotification']);
+
+// Notification Sent related routes
+Route::post('/register-notification-sent', [NotificationSentController::class, 'createNotificationSent']);
+Route::get('/edit-notification-sent/{notificationSent}', [NotificationSentController::class, 'showEditScreen']);
+Route::put('/edit-notification-sent/{notificationSent}', [NotificationSentController::class, 'updateNotificationSent']);
+Route::delete('/delete-notification-sent/{notificationSent}', [NotificationSentController::class, 'deleteNotificationSent']);
 
 Route::post('/logout', [UserController::class, 'logout']);
 

@@ -10,4 +10,7 @@ class Employee extends Model
     protected $table = 'employee_info';
     public $timestamps = false;   
     //
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }
