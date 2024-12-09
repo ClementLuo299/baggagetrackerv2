@@ -13,18 +13,20 @@
         "doctrine/dbal": "^4.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
-        "laravel/ui": "^4.6",
         "spatie/laravel-permission": "^6.10"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "ibex/crud-generator": "^2.1",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
+        "laravel/ui": "^4.6",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
         "pestphp/pest": "^3.6",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "san-kumar/laravel-crud": "^1.0"
     },
     "autoload": {
         "psr-4": {

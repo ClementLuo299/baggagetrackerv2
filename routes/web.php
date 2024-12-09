@@ -35,6 +35,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ExecutiveController;
 use App\Http\Controllers\FlightLegController;
 use App\Http\Controllers\ItineraryController;
+use App\Http\Controllers\CustomerInfoController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhoneNumbersController;
 use App\Http\Controllers\LocationUpdateController;
@@ -91,6 +92,8 @@ Route::post('/register-customer', [CustomerController::class, 'createCustomer'])
 Route::post('/edit-customer/{user}', [CustomerController::class, 'showEditScreen']);
 Route::put('/edit-customer/{user}', [CustomerController::class, 'updateCustomer']);
 Route::delete('/delete-customer/{customer}', [CustomerController::class, 'deleteCustomer']);
+
+Route::resource('/customer-infos', CustomerInfoController::class);
 
 //Itinerary related routes
 Route::post('/register-itinerary', [ItineraryController::class, 'createItinerary']);
@@ -190,3 +193,4 @@ Route::delete('/delete-notification-sent/{notificationSent}', [NotificationSentC
 
 Route::post('/logout', [UserController::class, 'logout']);
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
