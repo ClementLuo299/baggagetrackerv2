@@ -79,7 +79,7 @@ Route::get('/employees', function () {
     $notificationSubjects = NotificationSubject::all();
     $notificationSents = NotificationSent::all();
     return view('employeedashboard', ['users'=>$users,  'airplanes' => $airplanes, 'airports'=>$airports 
-    , 'itineraries'=>$itineraries, 'employees'=>$employees, 'airlines'=>$airlines, 'locations'=>$locations
+    , 'itineraries'=>$itineraries, 'airlines'=>$airlines, 'locations'=>$locations
     , 'flights'=>$flights, 'itineraryFlights'=>$itineraryFlights, 'baggages'=>$baggages, 'incidents'=>$incidents
     , 'baggageIncidents'=>$baggageIncidents, 'notifications'=>$notifications, 'locationUpdates'=>$locationUpdates
     , 'incidentEmployees'=>$incidentEmployees, 'notificationSubjects'=>$notificationSubjects
@@ -100,9 +100,9 @@ Route::delete('/delete-itinerary/{booking_id}/{passport_no}', [ItineraryControll
 
 //Employee related routes
 Route::post('/register-employee', [EmployeeController::class, 'createEmployee']);
-Route::post('/edit-employee/{employee}', [EmployeeController::class, 'showEditScreen']);
-Route::put('/edit-employee/{employee}', [EmployeeController::class, 'updateEmployee']);
-Route::delete('/delete-employee/{employee}', [EmployeeController::class, 'deleteEmployee']);
+Route::post('/edit-employee/{user}', [EmployeeController::class, 'showEditScreen']);
+Route::put('/edit-employee/{user}', [EmployeeController::class, 'updateEmployee']);
+Route::delete('/delete-employee/{user}', [EmployeeController::class, 'deleteEmployee']);
 
 //Airline related routes
 Route::post('/register-airline', [AirlineController::class, 'createAirline']);
@@ -136,9 +136,9 @@ Route::delete('/delete-flight/{flight}', [FlightLegController::class, 'deleteFli
 
 //Itinerary Flights related routes
 Route::post('/register-itinerary-flight', [ItineraryFlightsController::class, 'createItineraryFlight']);
-Route::post('/edit-itinerary-flight/{itineraryFlight}', [ItineraryFlightsController::class, 'showEditScreen']);
-Route::put('/edit-itinerary-flight/{itineraryFlight}', [ItineraryFlightsController::class, 'updateItineraryFlight']);
-Route::delete('/delete-itinerary-flight/{itineraryFlight}', [ItineraryFlightsController::class, 'deleteItineraryFlight']);
+//Route::post('/edit-itinerary-flight/{itineraryFlight}', [ItineraryFlightsController::class, 'showEditScreen']);
+//Route::put('/edit-itinerary-flight/{itineraryFlight}', [ItineraryFlightsController::class, 'updateItineraryFlight']);
+Route::delete('/delete-itinerary-flight/{booking_id}/{flight_id}', [ItineraryFlightsController::class, 'deleteItineraryFlight'])->name('itineraryflight.destroy');
 
 //Baggage related routes
 Route::post('/baggage-check-in', [BaggageController::class, 'createBaggage']);

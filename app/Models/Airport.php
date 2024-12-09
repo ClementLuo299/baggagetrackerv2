@@ -11,5 +11,9 @@ class Airport extends Model
     //
     protected $primaryKey = 'code';
     public $incrementing = false;
+
+    public function flightleg(){
+        return $this->hasMany(FlightLeg::class, 'code', 'origin');
+    }
 }
     

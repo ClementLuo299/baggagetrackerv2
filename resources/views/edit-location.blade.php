@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Edit Location</h1>
-    <form action="/edit-location/{{$location->id}}" method="POST">
+    <form action="/edit-location/{{$location->name}}" method="POST">
         @csrf
         @method('PUT') 
 

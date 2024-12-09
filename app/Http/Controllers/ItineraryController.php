@@ -21,25 +21,25 @@ class ItineraryController extends Controller
     //
     }
 
-    public function showEditScreen($booking_id) {
-        $itinerary = Itinerary::where('booking_id', $booking_id)->first();
-        return view('edit-itinerary', compact('itinerary'));
-    }
+    // public function showEditScreen($booking_id) {
+    //     $itinerary = Itinerary::where('booking_id', $booking_id)->first();
+    //     return view('edit-itinerary', compact('itinerary'));
+    // }
     
-    public function updateItinerary(Request $request, $booking_id) {
-        $request->validate([
-            'booking_id' => 'required',
-            'passport_no' => 'required',
-        ]);
+    // public function updateItinerary(Request $request, $booking_id) {
+    //     $request->validate([
+    //         'booking_id' => 'required',
+    //         'passport_no' => 'required',
+    //     ]);
 
-        $itinerary = Itinerary::where('booking_id',$booking_id)->first();
+    //     $itinerary = Itinerary::where('booking_id',$booking_id)->first();
 
-        $itinerary->booking_id = $request->input('booking_id');
-        $itinerary->passport_no = $request->input('passport_no');
-        $itinerary->save();
+    //     $itinerary->booking_id = $request->input('booking_id');
+    //     $itinerary->passport_no = $request->input('passport_no');
+    //     $itinerary->save();
     
-        return redirect('/employees');
-    }
+    //     return redirect('/employees');
+    // }
     
     public function deleteItinerary($booking_id) {
         $itinerary = Itinerary::where('booking_id',$booking_id)->first();

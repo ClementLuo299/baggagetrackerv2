@@ -7,9 +7,9 @@
 </head>
 <body>
     <h1>Edit Customer</h1>
-    <form action="/edit-customer/{{$user->id}}" method="POST">
-        @csrf
+    <form action="/edit-customer/submit" method="POST">
         @method('PUT')
+        @csrf
 
         <p>First Name</p>
         <input type="text" name="fname" value={{$user->fname}}>

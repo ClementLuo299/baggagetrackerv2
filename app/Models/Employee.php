@@ -9,8 +9,9 @@ class Employee extends Model
     protected $fillable = ['user','role','airline'];
     protected $table = 'employee_info';
     public $timestamps = false;   
+    protected $primaryKey = 'user';
     //
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user');
     }
 }

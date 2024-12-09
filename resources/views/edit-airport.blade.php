@@ -6,7 +6,7 @@
     <title>Baggage Tracker</title>
 </head>
 <body>
-    <h1>Edit Plane</h1>
+    <h1>Edit Airport</h1>
     <form action="/edit-airport/{{$airport->code}}" method="POST">
         @csrf
         @method('PUT')

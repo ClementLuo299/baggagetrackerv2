@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Edit Plane</h1>
-    <form action="/edit-airport/{{$airplane->registration_no}}" method="POST">
+    <form action="/edit-plane/{{$airplane->registration_no}}" method="POST">
         @csrf
         @method('PUT')
         <p>Registration number</p>

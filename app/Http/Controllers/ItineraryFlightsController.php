@@ -21,26 +21,35 @@ class ItineraryFlightsController extends Controller
     //
     }
 
-    public function showEditScreen(ItineraryFlights $itineraryFlight) {
-        return view('edit-itinerary-flight', ['itineraryFlight' => $itineraryFlight]);
-    }
+    // public function showEditScreen($booking_id) {
+    //     $itineraryflight = ItineraryFlights::where('booking_id', $booking_id)->first();
+    //     return view('edit-itinerary-flight', compact('itineraryflight'));
+    // }
     
-    public function updateItineraryFlight(ItineraryFlights $itineraryFlight, Request $request) {
-        $incomingFields = $request->validate([
-            'booking_id' => 'required',
-            'flight_id' => 'required',
-        ]);
+    // public function updateItineraryFlight(Request $request, $booking_id) {
+    //     $incomingFields = $request->validate([
+    //         'booking_id' => 'required',
+    //         'flight_id' => 'required',
+    //     ]);
+        
+    //     $itineraryflight = ItineraryFlights::where('booking_id', $booking_id)->first();
+
+    //     if (!$itineraryflight) {
+    //         return redirect('/')->withErrors(['error' => 'Itinerary Flight not found.']);
+    //     }
     
-        $incomingFields['booking_id'] = strip_tags($incomingFields['booking_id']);
-        $incomingFields['flight_id'] = strip_tags($incomingFields['flight_id']);
-    
-        $itineraryFlight->update($incomingFields);
-    
-        return redirect('/employees');
-    }
-    
-    public function deleteItineraryFlight(ItineraryFlights $itineraryFlight) {
-        $itineraryFlight->delete();
+    //     $itineraryflight->update($incomingFields);
+
+    //     return redirect('/employees');
+    // }
+
+    public function deleteItineraryFlight($booking_id) {
+        $itineraryflight = ItineraryFlights::where('booking_id', $booking_id)->first();
+        $itineraryflight->delete();
+
+        if(!$itineraryflight){
+            return redirect('/');
+        }
         return redirect('/employees');
     }
     

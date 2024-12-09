@@ -122,24 +122,24 @@
 
         <div>
             <h3>Employees</h3>
-            @foreach($employees as $employee)
-            <div style="border:3px solid black; padding:10px; margin: 10px">
-                <h4>{{$employee->name}}</h4>
-                First Name: {{$employee['fname']}},
-                Last Name: {{$employee['lname']}},
-                Role: {{$employee['role']}},
-                Airline: {{$employee['airline']}}
+            @foreach($users as $user)
+                @if($user->employee)
+                <div style="border:3px solid black; padding:10px; margin: 10px">
+                    <h5>{{$user->fname}} {{$user->lname}}</h5>
+                    Role: {{$user->employee->role}},
+                    Airline: {{$user->employee->airline}}
 
-                <form action="/edit-employee/{{$employee->name}}" method="POST">
-                    @csrf
-                    <button>Edit</button>
-                </form>
-                <form action="/delete-employee/{{$employee->name}}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button>Delete</button>
-                </form>
-            </div>
+                    <form action="/edit-employee/{{$user->id}}" method="POST">
+                        @csrf
+                        <button>Edit</button>
+                    </form>
+                    <form action="/delete-employee/{{$user->id}}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button>Delete</button>
+                    </form>
+                </div>
+                @endif
             @endforeach
         </div>
 
@@ -169,11 +169,11 @@
                 <h4>{{$airline->name}}</h4>
                 Country of Origin: {{$airline['country_of_origin']}}
 
-                <form action="/edit-airline/{{$airline->id}}" method="POST">
+                <form action="/edit-airline/{{$airline->name}}" method="POST">
                     @csrf
                     <button>Edit</button>
                 </form>
-                <form action="/delete-airline/{{$airline->id}}" method="POST">
+                <form action="/delete-airline/{{$airline->name}}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button>Delete</button>
@@ -181,7 +181,6 @@
             </div>
             @endforeach
         </div>
-
     </div>
 
 
@@ -235,9 +234,9 @@
                 @csrf
                 <input type="text" name="name" placeholder="location name">
                 <input type="text" name="coordinates" placeholder="location coordinates">
-                <input type="text" name="airport" placeholder="airport code if in airport">
-                <input type="text" name="airplane" placeholder="airplane registration_no if in airplane">
-                <input type="text" name="type" placeholder="location type (e.g., baggage carousell)">
+                <input type="text" name="airport" placeholder="airport code if airport">
+                <input type="text" name="airplane" placeholder="airplane no if airplane">
+                <input type="text" name="type" placeholder="location type e.g. security)">
 
                 <button>Add Location</button>
             </form>
@@ -253,11 +252,11 @@
                 Airplane: {{$location['airplane']}},
                 Type: {{$location['type']}}
 
-                <form action="/edit-location/{{$location->id}}" method="POST">
+                <form action="/edit-location/{{$location->name}}" method="POST">
                     @csrf
                     <button>Edit</button>
                 </form>
-                <form action="/delete-location/{{$location->id}}" method="POST">
+                <form action="/delete-location/{{$location->name}}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button>Delete</button>
@@ -372,12 +371,12 @@
             <div style="border:3px solid black; padding:10px; margin: 10px">
                 <h4>Booking ID: {{$itineraryFlight->booking_id}}</h4>
                 Flight ID: {{$itineraryFlight['flight_id']}}
-
+<!-- 
                 <form action="/edit-itinerary-flight/{{$itineraryFlight->id}}" method="POST">
                     @csrf
                     <button>Edit</button>
-                </form>
-                <form action="/delete-itinerary-flight/{{$itineraryFlight->id}}" method="POST">
+                </form> -->
+                <form action="{{ route('itineraryflight.destroy', ['booking_id'=>$itineraryFlight->booking_id, 'flight_id'=>$itineraryFlight->flight_id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button>Delete</button>
@@ -387,6 +386,22 @@
         </div>
 
     </div>
+
+    <div>
+            <h3>Itineraries</h3>
+            @foreach($itineraries as $itinerary)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>{{$itinerary->booking_id}}</h4>
+                Customer Passport No: {{$itinerary->passport_no}}
+
+                <form action="{{ route('itineraries.destroy', ['booking_id'=>$itinerary->booking_id, 'passport_no'=>$itinerary->passport_no]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
 
     <!-- Manage Baggage -->
     <div>

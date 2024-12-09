@@ -7,17 +7,17 @@
 </head>
 <body>
     <h1>Edit Itinerary Flight</h1>
-    <form action="/edit-itinerary-flight/{{$itineraryFlight->id}}" method="POST">
+    <form action="/edit-itinerary-flight/{{$itineraryflight->booking_id}}" method="POST">
         @csrf
         @method('PUT') 
         
         <!-- Booking ID -->
         <p>Customer Booking ID</p>
-        <input type="text" name="booking_id" value="{{$itineraryFlight->booking_id}}" required>
+        <input type="text" name="booking_id" value="{{$itineraryflight->booking_id}}" required>
 
         <!-- Flight ID -->
         <p>Flight ID</p>
-        <input type="text" name="flight_id" value="{{$itineraryFlight->flight_id}}" required>
+        <input type="text" name="flight_id" value="{{$itineraryflight->flight_id}}" required>
 
         <button>Save Changes</button>
     </form>
