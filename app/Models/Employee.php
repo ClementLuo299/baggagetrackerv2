@@ -14,4 +14,8 @@ class Employee extends Model
     public function user(){
         return $this->belongsTo(User::class, 'user');
     }
+
+    public function airline(){
+        return $this->hasOne(Airline::class, 'airline', 'code');
+    }
 }

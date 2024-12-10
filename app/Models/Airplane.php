@@ -22,4 +22,8 @@ class Airplane extends Model
     public function location(){
         return $this->hasOne(Location::class,'coordinates','coordinates');
     }
+
+    public function destination(){
+        return $this->hasOne(Airport::class,'code','coordinates');
+    }
 }

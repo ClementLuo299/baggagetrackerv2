@@ -11,7 +11,6 @@ class NotificationSentController extends Controller
     public function createNotificationSent(Request $request, $notification_id) {
         $incomingFields = $request->validate([
             'recipient' => 'required',
-            'notification_id' => 'required'
         ]);
 
         $incomingFields['recipient'] = strip_tags($incomingFields['recipient']);

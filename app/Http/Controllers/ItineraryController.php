@@ -37,7 +37,7 @@ class ItineraryController extends Controller
     //     $itinerary->booking_id = $request->input('booking_id');
     //     $itinerary->passport_no = $request->input('passport_no');
     //     $itinerary->save();
-    
+       
     //     return redirect('/employees');
     // }
     

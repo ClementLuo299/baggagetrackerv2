@@ -17,4 +17,8 @@ class Itinerary extends Model
     public function customer(){
         return $this->belongsTo(Customer::class, 'passport_no', 'passport_no');
     }
+
+    public function itinerary(){
+        return $this->hasOne(Itinerary::class, 'booking_id', 'booking_id');
+    }
 }

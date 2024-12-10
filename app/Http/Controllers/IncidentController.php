@@ -43,6 +43,7 @@ class IncidentController extends Controller
             'is_delayed' => 'required',
             'incident_time' => 'required',
             'is_resolved' => 'required',
+            'description' => 'nullable',
             'location' => 'required',
         ]);
     

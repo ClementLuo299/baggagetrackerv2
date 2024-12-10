@@ -15,9 +15,16 @@
         <p>Booking ID</p>
         <input type="text" name="booking_id" value="{{$itinerary->booking_id}}" required>
 
-        <!-- Customer Passport No -->
-        <p>Passport No</p>
-        <input type="text" name="passport_no" value="{{$itinerary->passport_no}}" required>
+        Passport No:
+        <select name="passport_no" id="passport_no">
+            @foreach($users as $user)
+                    @if ($user->customer)
+                        <option value="{{ $user->passport_no }}">
+                            {{ $user->customer->passport_no }} {{ $user->fname }} {{ $user->lname }}
+                        </option>
+                    @endif
+            @endforeach
+        </select>
 
         <button>Save Changes</button>
     </form>

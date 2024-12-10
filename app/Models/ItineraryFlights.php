@@ -16,5 +16,9 @@ class ItineraryFlights extends Model
     // 
     public function FlightLeg(){
         return $this->belongsTo(FlightLeg::class, 'flight_id', 'flight_id');
-    }// 
+    }
+
+    public function itinerary(){
+        return $this->hasOne(Itinerary::class, 'booking_id', 'booking_id');
+    }
 }

@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Edit Customer</h1>
-    <form action="/edit-customer/submit" method="POST">
+    <form action="/edit-customer/{{$user->id}}" method="POST">
         @method('PUT')
         @csrf
 

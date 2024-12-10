@@ -58,11 +58,14 @@
 
     @can('employee')
 
-    <!-- Logout button -->
-    <form action="/logout" method ="POST">
-        @csrf
-        <Button>Logout</Button>
-    </form>
+    <div>
+        <!-- Logout button -->
+        <form action="/logout" method ="POST">
+            @csrf
+            <h2>Welcome {{Auth::user()->fname}} {{Auth::user()->lname}}</h2>
+            <Button>Logout</Button>
+        </form>
+    </div>
 
     <!-- Manage Customers -->
     <div>
@@ -134,7 +137,7 @@
                 <select name="passport_no" id="passport_no">
                     @foreach($users as $user)
                             @if ($user->customer)
-                                <option value="{{ $user->passport_no }}">
+                                <option value={{ $user->customer->passport_no }}>
                                     {{ $user->customer->passport_no }} {{ $user->fname }} {{ $user->lname }}
                                 </option>
                             @endif
@@ -218,7 +221,6 @@
                 <input type="text" name="fname" placeholder="first name">
                 <input type="text" name="lname" placeholder="last name">
                 <input type="text" name="role" placeholder="employee role">
-                <input placeholder="employee airline">
                 Airline:
                 <select name = "airline" id = "name">
                     @foreach($airlines as $air)
@@ -230,8 +232,6 @@
                     <option value="executive">Executive</option>
                     <option value="employee">Employee</option>
                   </select>
-                <button>Send</button>
-
                 <button>Add Employee</button>
             </form>
         </div>
@@ -316,8 +316,20 @@
                 @csrf
                 <input type="text" name="name" placeholder="location name">
                 <input type="text" name="coordinates" placeholder="location coordinates">
-                <input type="text" name="airport" placeholder="airport code if airport">
-                <input type="text" name="airplane" placeholder="airplane no if airplane">
+                Airport:
+                <select name = "airport" id = "name">
+                    <option value = ""></option>
+                    @foreach($airports as $air)
+                        <option value = "{{$air->code}}">{{$air->code}} - {{$air->name}}</option>
+                    @endforeach
+                </select>
+                Airplane:
+                <select name = "airplane" id = "name">
+                    <option value = ""></option>
+                    @foreach($airplanes as $air)
+                        <option value = "{{$air->registration_no}}">{{$air->registration_no}}</option>
+                    @endforeach
+                </select>
                 <input type="text" name="type" placeholder="location type e.g. security)">
 
                 <button>Add Location</button>
@@ -409,9 +421,25 @@
             <form action="/register-flight" method = "POST">
                 @csrf
                 <input type = "text" name = "flight_id" placeholder="flight id">
-                <input type = "text" name = "airplane" placeholder="airplane id">
-                <input type = "text" name = "origin" placeholder="origin airport id">
-                <input type = "text" name = "destination" placeholder="destination airport id">
+                Airplane:
+                <select name = "airplane" id = "name">
+                    @foreach($airplanes as $airplane)
+                        <option value = "{{$airplane->registration_no}}">{{$airplane->registration_no}}</option>
+                    @endforeach
+                </select>
+                <!--input type = "text" name = "airplane" placeholder="airplane id"-->
+                Origin:
+                <select name = "origin" id = "name">
+                    @foreach($airports as $air)
+                        <option value = "{{$air->code}}">{{$air->code}} - {{$air->name}}</option>
+                    @endforeach
+                </select>
+                Destination:
+                <select name = "destination" id = "name">
+                    @foreach($airports as $air)
+                        <option value = "{{$air->code}}">{{$air->code}} - {{$air->name}}</option>
+                    @endforeach
+                </select>
                 <input type = "datetime-local" name = "departure_time" placeholder="departure time">
                 <input type = "datetime-local" name = "arrival_time" placeholder="arrival time">
                 <button>Add Flight Leg</button>
@@ -456,8 +484,18 @@
         <div>
             <form action="/register-itinerary-flight" method="POST">
                 @csrf
-                <input type="text" name="booking_id" placeholder="customer booking id">
-                <input type="text" name="flight_id" placeholder="flight_id">
+                Booking_id:
+                <select name = "booking_id" id = "booking_id">
+                    @foreach($itineraries as $itinerary)
+                        <option value = "{{$itinerary->booking_id}}">{{$itinerary->booking_id}} </option>
+                    @endforeach
+                </select>
+                Flight_id:
+                <select name = "flight_id" id = "flight_id">
+                    @foreach($flights as $flight)
+                        <option value = "{{$flight->flight_id}}">{{$flight->flight_id}} </option>
+                    @endforeach
+                </select>
                 <button>Add Itinerary Flight</button>
             </form>
         </div>
@@ -483,22 +521,6 @@
         </div>
 
     </div>
-
-    <div>
-            <h3>Itineraries</h3>
-            @foreach($itineraries as $itinerary)
-            <div style="border:3px solid black; padding:10px; margin: 10px">
-                <h4>{{$itinerary->booking_id}}</h4>
-                Customer Passport No: {{$itinerary->passport_no}}
-
-                <form action="{{ route('itineraries.destroy', ['booking_id'=>$itinerary->booking_id, 'passport_no'=>$itinerary->passport_no]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button>Delete</button>
-                </form>
-            </div>
-            @endforeach
-        </div>
     @endcan
 
     @can('employee')
@@ -512,9 +534,25 @@
             <form action="/baggage-check-in" method="POST">
                 @csrf
                 <input type="text" name="tracker_id" placeholder="baggage tracker id">
-                <input type="text" name="passport_no" placeholder="customer passport no">
+                <!-- Dropdown for selecting passport number -->
                 <input type="text" name="tracker_type" placeholder="tracker type">
-                <input type="text" name="booking_id" placeholder="booking id">
+                Booking_id:
+                <select name = "booking_id" id = "booking_id">
+                    @foreach($itineraries as $itinerary)
+                        <option value = "{{$itinerary->booking_id}}"> {{$itinerary->booking_id}} </option>
+                    @endforeach
+                </select>
+                <!-- Dropdown for selecting passport number -->
+                Passport No:
+                <select name="passport_no" id="passport_no">
+                    @foreach($users as $user)
+                            @if ($user->customer)
+                                <option value={{ $user->customer->passport_no }}>
+                                    {{ $user->customer->passport_no }} {{ $user->fname }} {{ $user->lname }}
+                                </option>
+                            @endif
+                    @endforeach
+                </select>
 
                 <!-- Dropdown for boolean -->
                 <select name="is_time_sensitive">
@@ -602,13 +640,13 @@
                 Location Name: {{$locationUpdate->location_name}}
 
                 <!-- Edit Button -->
-                <form action="/edit-location-update/{{$locationUpdate->id}}" method="POST">
+                <form action="/edit-location-update/{{$locationUpdate->location_name}}" method="POST">
                     @csrf
                     <button>Edit</button>
                 </form>
 
                 <!-- Delete Button -->
-                <form action="/delete-location-update/{{$locationUpdate->id}}" method="POST">
+                <form action="/delete-location-update/{{$locationUpdate->location_name}}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button>Delete</button>
@@ -658,8 +696,12 @@
 
                 <input type="datetime-local" name="incident_time" placeholder="time of incident">
                 <input type="text" name="description" placeholder="description of incident">
-                <input type="text" name="location" placeholder="location of incident">
-
+                Location:
+                <select name="location" id="name">
+                    @foreach($locations as $location)
+                    <option value = "{{$location->name}}";>{{$location->name}}</option>
+                    @endforeach
+                </select>
                 <button>Add Incident</button>
             </form>
         </div>
@@ -701,9 +743,18 @@
         <div>
             <form action="/register-baggage-incidents" method="POST">
                 @csrf
-                <input type="text" name="tracker_id" placeholder="baggage tracker id">
-                <input type="text" name="incident" placeholder="incident id">
-
+                Baggage Tracker ID:
+                <select name="tracker_id" id="tracker_id">
+                    @foreach($baggages as $baggage)
+                    <option value = "{{$baggage->tracker_id}}";>{{$baggage->tracker_id}}</option>
+                    @endforeach
+                </select>
+                Incident ID:
+                <select name="incident" id="incident_id">
+                    @foreach($incidents as $incident)
+                    <option value = "{{$incident->incident_id}}";>{{$incident->incident_id}}</option>
+                    @endforeach
+                </select>
                 <button>Add Baggage Incident</button>
             </form>
         </div>
@@ -712,15 +763,15 @@
             <h3>Baggage Incident Records</h3>
             @foreach($baggageIncidents as $baggageIncident)
             <div style="border:3px solid black; padding:10px; margin: 10px">
-                <h4>Baggage Incident ID: {{$baggageIncident->id}}</h4>
+                <h4>Baggage Incident ID: {{$baggageIncident->incident}}</h4>
                 Tracker ID: {{$baggageIncident['tracker_id']}},
                 Incident ID: {{$baggageIncident['incident']}}
                 
-                <form action="/edit-baggage-incident/{{$baggageIncident->id}}" method="POST">
+                <form action="/edit-baggage-incidents/{{$baggageIncident->tracker_id}}" method="POST">
                     @csrf
                     <button>Edit</button>
                 </form>
-                <form action="/delete-baggage-incident/{{$baggageIncident->id}}" method="POST">
+                <form action="/delete-baggage-incidents/{{$baggageIncident->tracker_id}}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button>Delete</button>
@@ -743,8 +794,22 @@
         <div>
             <form action="/register-incident-employee" method="POST">
                 @csrf
-                <input type="text" name="incident_id" placeholder="Incident ID">
-                <input type="text" name="employee" placeholder="Employee">
+                Incident ID:
+                <select name="incident_id" id="incident_id">
+                    @foreach($incidents as $incident)
+                    <option value = "{{$incident->incident_id}}";>{{$incident->incident_id}}</option>
+                    @endforeach
+                </select>
+                Employee:
+                <select name="employee" id="user">
+                    @foreach($users as $user)
+                            @if ($user->employee)
+                                <option value="{{ $user->employee->user }}">
+                                    {{ $user->employee->user}} {{ $user->fname }} {{ $user->lname }}
+                                </option>
+                            @endif
+                    @endforeach
+                </select>
                 <button>Add Incident Employee</button>
             </form>
         </div>
@@ -758,13 +823,13 @@
                 Employee: {{$incidentEmployee->employee}}
 
                 <!-- Edit Button -->
-                <form action="/edit-incident-employee/{{$incidentEmployee->id}}" method="POST">
+                <form action="/edit-incident-employee/{{$incidentEmployee->incident_id}}" method="POST">
                     @csrf
                     <button>Edit</button>
                 </form>
 
                 <!-- Delete Button -->
-                <form action="/delete-incident-employee/{{$incidentEmployee->id}}" method="POST">
+                <form action="/delete-incident-employee/{{$incidentEmployee->incident_id}}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button>Delete</button>
@@ -776,47 +841,6 @@
     @endcan
 
     @can('employee')
-    <!-- Manage Notification Subject -->
-    <div>
-        <div>
-            <h2>Manage Notification Subject</h2>
-        </div>
-
-        <!-- Add Notification Subject Form -->
-        <div>
-            <form action="/register-notification-subject" method="POST">
-                @csrf
-                <input type="text" name="notification_id" placeholder="Notification ID">
-                <input type="text" name="tracker_id" placeholder="Baggage Tracker ID">
-                <button>Add Notification Subject</button>
-            </form>
-        </div>
-
-        <!-- Notification Subject Records -->
-        <div>
-            <h3>Notification Subject Records</h3>
-            @foreach($notificationSubjects as $notificationSubject)
-            <div style="border:3px solid black; padding:10px; margin: 10px">
-                <h4>Notification ID: {{$notificationSubject->notification_id}}</h4>
-                Tracker ID: {{$notificationSubject->tracker_id}}
-
-                <!-- Edit Button -->
-                <form action="/edit-notification-subject/{{$notificationSubject->id}}" method="POST">
-                    @csrf
-                    <button>Edit</button>
-                </form>
-
-                <!-- Delete Button -->
-                <form action="/delete-notification-subject/{{$notificationSubject->id}}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button>Delete</button>
-                </form>
-            </div>
-            @endforeach
-        </div>
-    </div>
-
     <!-- Manage Notifications -->
     <div>
         <div>
@@ -826,13 +850,13 @@
         <div>
             <form action="/register-notification" method="POST">
                 @csrf
-                <input type="text" name="notification_id" placeholder="notification id">
+                <input type="text" name="notification_id" placeholder="Notification ID">
                 <input type="text" name="content" placeholder="notification content">
                 <input type="datetime-local" name="notification_time" placeholder="time of notification">
-                About:
+                Passport No, Baggage Tracker ID:
                 <select name="tracker_id" id="tracker_id">
                     @foreach($baggages as $baggage)
-                    <option value = {{$baggage->tracker_id}}>{{$baggage->passport_no}}: {{$baggage->tracker_id}}</option>
+                    <option value = {{$baggage->tracker_id}}>{{$baggage->passport_no}} {{$baggage->tracker_id}}</option>
                     @endforeach
                 </select>
                 <button>Add Notification</button>
@@ -874,6 +898,56 @@
         </div>
     </div>
 
+    <!-- Manage Notification Subject -->
+    <div>
+        <div>
+            <h2>Manage Notification Subject</h2>
+        </div>
+
+        <!-- Add Notification Subject Form -->
+        <div>
+            <form action="/register-notification-subject" method="POST">
+                @csrf
+                Notification ID:
+                <select name="notification_id" id="notification_id">
+                    @foreach($notifications as $notifcation)
+                    <option value = {{$notifcation->notification_id}}>{{$notifcation->notification_id}}</option>
+                    @endforeach
+                </select>
+                Baggage Tracker ID:
+                <select name="tracker_id" id="tracker_id">
+                    @foreach($baggages as $baggage)
+                    <option value = "{{$baggage->tracker_id}}";>{{$baggage->tracker_id}}</option>
+                    @endforeach
+                </select>
+                <button>Add Notification Subject</button>
+            </form>
+        </div>
+
+        <!-- Notification Subject Records -->
+        <div>
+            <h3>Notification Subject Records</h3>
+            @foreach($notificationSubjects as $notificationSubject)
+            <div style="border:3px solid black; padding:10px; margin: 10px">
+                <h4>Notification ID: {{$notificationSubject->notification_id}}</h4>
+                Tracker ID: {{$notificationSubject->tracker_id}}
+
+                <!-- Edit Button -->
+                <form action="/edit-notification-subject/{{$notificationSubject->tracker_id}}" method="POST">
+                    @csrf
+                    <button>Edit</button>
+                </form>
+
+                <!-- Delete Button -->
+                <form action="/delete-notification-subject/{{$notificationSubject->tracker_id}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button>Delete</button>
+                </form>
+            </div>
+            @endforeach
+        </div>
+    </div>
 
     <!-- Manage Notification Sent -->
     <div>
@@ -885,10 +959,43 @@
         <div>
             <form action="/register-notification-sent" method="POST">
                 @csrf
-                <input type="text" name="notification_id" placeholder="Notification ID">
-                <input type="text" name="recipient" placeholder="Recipient (Customer Passport No)">
-                <input type="text" name="sender" placeholder="Sender (Employee User ID)">
-                <button>Add Notification Sent</button>
+                Notification ID:
+                <select name="notification_id" id="notification_id">
+                    @foreach($notifications as $notifcation)
+                    <option value = {{$notifcation->notification_id}}>{{$notifcation->notification_id}}</option>
+                    @endforeach
+                </select>
+                <select name="tracker_id" id="tracker_id">
+                    @foreach($baggages as $baggage)
+                    <option value = "{{$baggage->tracker_id}}";>{{$baggage->tracker_id}}</option>
+                    @endforeach
+                </select>
+
+                Recipient (Customer PassportNo):
+                <!-- Dropdown for selecting passport number -->
+                Passport No:
+                <select name="passport_no" id="passport_no">
+                    @foreach($users as $user)
+                            @if ($user->customer)
+                                <option value="{{ $user->passport_no }}">
+                                    {{ $user->customer->passport_no }} {{ $user->fname }} {{ $user->lname }}
+                                </option>
+                            @endif
+                    @endforeach
+                </select>
+
+                Sender (Employee):
+                Employee:
+                <select name="user" id="user">
+                    @foreach($users as $user)
+                            @if ($user->employee)
+                                <option value="{{ $user->employee->user }}">
+                                    {{ $user->employee->user}} {{ $user->fname }} {{ $user->lname }}
+                                </option>
+                            @endif
+                    @endforeach
+                </select>
+                <button>Send Notification</button>
             </form>
         </div>
 
@@ -902,13 +1009,13 @@
                 Sender: {{$notificationSent->sender}}
 
                 <!-- Edit Button -->
-                <form action="/edit-notification-sent/{{$notificationSent->id}}" method="POST">
+                <form action="/edit-notification-sent/{{$notificationSent->notification_id}}" method="POST">
                     @csrf
                     <button>Edit</button>
                 </form>
 
                 <!-- Delete Button -->
-                <form action="/delete-notification-sent/{{$notificationSent->id}}" method="POST">
+                <form action="/delete-notification-sent/{{$notificationSent->notification_id}}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button>Delete</button>

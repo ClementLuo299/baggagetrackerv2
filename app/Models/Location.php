@@ -18,6 +18,10 @@ class Location extends Model
     }
 
     public function airplane(){
-        return $this->hasMany(Airplane::class,'coordinates','coordinates');
+        return $this->hasOne(Airplane::class,'airplane','airplane');
+    }
+
+    public function airport(){
+        return $this->hasOne(Airport::class,'airport','airport');
     }
 }

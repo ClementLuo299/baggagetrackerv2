@@ -11,6 +11,8 @@ class LocationController extends Controller
         'name' => 'required',
         'coordinates' => 'required',
         'type' => 'required',
+        'airport' => 'nullable',
+        'airline'=> 'nullable',
     ]);
 
     $incomingFields['name'] = strip_tags($incomingFields['name']);
@@ -31,6 +33,8 @@ class LocationController extends Controller
             'name' => 'required',
             'coordinates' => 'required',
             'type' => 'required',
+            'airport' => 'nullable',
+            'airline'=> 'nullable',
         ]);
     
         $incomingFields['name'] = strip_tags($incomingFields['name']);

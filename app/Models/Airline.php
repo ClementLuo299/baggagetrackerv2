@@ -15,4 +15,8 @@ class Airline extends Model
     public function airplane(){
         return $this->hasMany(Airplane::class,'name','airline');
     }
+
+    public function employee(){
+        return $this->hasMany(Employee::class,'name','airline');
+    }
 }

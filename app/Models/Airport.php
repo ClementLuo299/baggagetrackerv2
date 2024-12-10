@@ -15,5 +15,9 @@ class Airport extends Model
     public function flightleg(){
         return $this->hasMany(FlightLeg::class, 'code', 'origin');
     }
+
+    public function flightleg2(){
+        return $this->hasMany(FlightLeg::class, 'code', 'destination');
+    }
 }
     

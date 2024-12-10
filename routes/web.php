@@ -84,7 +84,7 @@ Route::get('/employees', function () {
         $customerBaggages = Baggage::where('passport_no',$user->customer->passport_no)->get();
     }
     $customerNotifications = Notification::all();
-    if(User::find($id)->hasRole('Customer')){
+    if(User::find($id)->hasRole('customer')){
         $user = User::find($id);
         $customerNotificationsSent = NotificationSent::where('recipient',$user->id)->get();
         $not_id = $customerNotificationsSent->pluck('notification_id');
@@ -146,8 +146,8 @@ Route::delete('/delete-plane/{airplane}', [AirplaneController::class, 'deletePla
 //Flight related routes
 Route::post('/register-flight', [FlightLegController::class, 'createFlightLeg']);
 Route::post('/edit-flight/{flight}', [FlightLegController::class, 'showEditScreen']);
-Route::put('/edit-flight/{flight}', [FlightLegController::class, 'updateFlight']);
-Route::delete('/delete-flight/{flight}', [FlightLegController::class, 'deleteFlight']);
+Route::put('/edit-flight/{flight}', [FlightLegController::class, 'updateFlightLeg']);
+Route::delete('/delete-flight/{flight}', [FlightLegController::class, 'deleteFlightLeg']);
 
 //Itinerary Flights related routes
 Route::post('/register-itinerary-flight', [ItineraryFlightsController::class, 'createItineraryFlight']);

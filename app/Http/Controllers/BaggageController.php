@@ -13,6 +13,8 @@ class BaggageController extends Controller
         'booking_id' => 'required',
         'is_time_sensitive' => 'required',
         'is_hazardous' => 'required',
+        'baggage_weight' => 'required',
+
     ]);
 
     $incomingFields['tracker_id'] = strip_tags($incomingFields['tracker_id']);
@@ -20,6 +22,7 @@ class BaggageController extends Controller
     $incomingFields['booking_id'] = strip_tags($incomingFields['booking_id']);
     $incomingFields['is_time_sensitive'] = strip_tags($incomingFields['is_time_sensitive']);
     $incomingFields['is_hazardous'] = strip_tags($incomingFields['is_hazardous']);
+    $incomingFields['baggage_weight'] = strip_tags($incomingFields['baggage_weight']);
 
     Baggage::create($incomingFields);
     return redirect('/employees');

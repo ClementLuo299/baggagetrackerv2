@@ -15,12 +15,15 @@ class AirplaneController extends Controller
             'capacity' => 'required',
             'coordinates' => 'nullable',
             'airport' => 'nullable',
+            'airline' => 'required',
             'coordinates' => 'nullable'
         ]);
 
         $incomingFields['registration_no'] = strip_tags($incomingFields['registration_no']);
         $incomingFields['type'] = strip_tags($incomingFields['type']);
         $incomingFields['capacity'] = strip_tags($incomingFields['capacity']);
+        $incomingFields['airline'] = strip_tags($incomingFields['airline']);
+
         //Temp set capacity
         $incomingFields['payload'] = 0;
 
@@ -29,13 +32,15 @@ class AirplaneController extends Controller
             'type' => $incomingFields['type'],
             'capacity' => $incomingFields['capacity'],
             'payload' =>$incomingFields['payload'],
+            'airline' => $incomingFields['airline'],
             'coordinates' => $incomingFields['coordinates'],
             'airport' => $incomingFields['airport'] ?? ''
         ]);
         Location::create([
             'name' => $incomingFields['registration_no'],
             'coordinates' => $incomingFields['coordinates'],
-            'airplane' => $incomingFields['registration_no']
+            'airplane' => $incomingFields['registration_no'],
+            'type' => 'Airplane'
         ]);
         
         return redirect('/employees');

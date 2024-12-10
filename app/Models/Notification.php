@@ -14,4 +14,8 @@ class Notification extends Model
     public function notificationsent(){
         return $this->hasMany(NotificationSent::class,'notification_id','notification_id');
     }
+
+    public function notificationsubject(){
+        return $this->hasMany(NotificationSubject::class,'notification_id','notification_id');
+    }
 }

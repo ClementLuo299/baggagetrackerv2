@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class LocationUpdate extends Model
 {   protected $fillable = ['time','tracker_id','location_name'];
     protected $table = 'location_update';
-    public $timestamps = false;   
+    public $timestamps = false;
+    protected $primaryKey = 'location_name';
+    protected $keyType = 'string';
+    public $incrementing = false;   
     //
     //
     public function baggage(){

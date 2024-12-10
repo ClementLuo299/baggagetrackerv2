@@ -62,12 +62,12 @@ class UserController extends Controller
             'userID' => 'required',
             'password' => 'required',
             'fname' => 'required',
-            'mname' => 'required',
+            'mname' => 'nullable',
             'lname' => 'required',
-            'street' => 'required',
-            'country' => 'required',
-            'postal_code' => 'required',
-            'email' => 'required',
+            'street' => 'nullable',
+            'country' => 'nullable',
+            'postal_code' => 'nullable',
+            'email' => 'nullable',
         ]);
 
         $incomingFields['userID'] = strip_tags($incomingFields['userID']);
