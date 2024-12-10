@@ -10,4 +10,11 @@ class LocationUpdate extends Model
     public $timestamps = false;   
     //
     //
+    public function baggage(){
+        return $this->belongsTo(Baggage::class, 'tracker_id', 'tracker_id');
+    }
+
+    public function location(){
+        return $this->hasOne(Location::class, 'name', 'location_name');
+    }
 }

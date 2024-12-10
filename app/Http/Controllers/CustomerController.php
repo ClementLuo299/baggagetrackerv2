@@ -22,11 +22,13 @@ class CustomerController extends Controller
     $incomingFields['country_citizenship'] = strip_tags($incomingFields['country_citizenship']);
 
     $user = User::create([
-        'name'=>$incomingFields['fname'],
+        'name'=>$incomingFields['passport_no'],
         'password'=>Hash::make($incomingFields['passport_no']),
         'fname'=>$incomingFields['fname'],
         'lname'=>$incomingFields['lname']
     ]);
+
+    $user->assignRole('customer');
 
     $id = DB::getPdo()->lastInsertId();
 

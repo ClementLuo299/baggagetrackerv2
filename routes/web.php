@@ -12,14 +12,15 @@ use App\Models\Location;
 use App\Models\FlightLeg;
 use App\Models\Itinerary;
 use App\Models\Notification;
-use App\Models\LocationUpdate;
 
+use App\Models\LocationUpdate;
 use App\Models\BaggageIncidents;
 use App\Models\ItineraryFlights;
 use App\Models\NotificationSent;
 use App\Models\IncidentEmployees;
 use Illuminate\Support\Facades\DB;
 use App\Models\NotificationSubject;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -58,6 +59,7 @@ Route::get('/emplogin', function () {
 });
 
 Route::post('/emplogin/submit', [UserController::class, 'login']);
+Route::post('/login/submit', [UserController::class, 'customerLogin']);
 
 
 Route::get('/employees', function () {
@@ -75,15 +77,28 @@ Route::get('/employees', function () {
     $baggages = Baggage::all();
     $incidents = Incident::all();
     $baggageIncidents = BaggageIncidents::all();
+    $id = Auth::id();
+    $customerBaggages = Baggage::all();
+    if(User::find($id)->hasRole('Customer')){
+        $user = User::find($id);
+        $customerBaggages = Baggage::where('passport_no',$user->customer->passport_no)->get();
+    }
+    $customerNotifications = Notification::all();
+    if(User::find($id)->hasRole('Customer')){
+        $user = User::find($id);
+        $customerNotificationsSent = NotificationSent::where('recipient',$user->id)->get();
+        $not_id = $customerNotificationsSent->pluck('notification_id');
+        $customerNotifications = Notification::where('notification_id', $not_id)->get();
+    }
     $notifications = Notification::all();
     $notificationSubjects = NotificationSubject::all();
     $notificationSents = NotificationSent::all();
-    return view('employeedashboard', ['users'=>$users,  'airplanes' => $airplanes, 'airports'=>$airports 
+    return view('employeedashboard', ['users'=>$users,  'customerbaggages' => $customerBaggages, 'airplanes' => $airplanes, 'airports'=>$airports 
     , 'itineraries'=>$itineraries, 'airlines'=>$airlines, 'locations'=>$locations
     , 'flights'=>$flights, 'itineraryFlights'=>$itineraryFlights, 'baggages'=>$baggages, 'incidents'=>$incidents
     , 'baggageIncidents'=>$baggageIncidents, 'notifications'=>$notifications, 'locationUpdates'=>$locationUpdates
     , 'incidentEmployees'=>$incidentEmployees, 'notificationSubjects'=>$notificationSubjects
-    , 'notificationSents'=>$notificationSents]);
+    , 'notificationSents'=>$notificationSents, 'customernotifications' => $customerNotifications]);
 });
 
 //Customer related routes
@@ -182,8 +197,9 @@ Route::post('/edit-notification/{notification}', [NotificationController::class,
 Route::put('/edit-notification/{notification}', [NotificationController::class, 'updateNotification']);
 Route::delete('/delete-notification/{notification}', [NotificationController::class, 'deleteNotification']);
 
+
 // Notification Sent related routes
-Route::post('/register-notification-sent', [NotificationSentController::class, 'createNotificationSent']);
+Route::post('/register-notification-sent/{notification_id}', [NotificationSentController::class, 'createNotificationSent']);
 Route::get('/edit-notification-sent/{notificationSent}', [NotificationSentController::class, 'showEditScreen']);
 Route::put('/edit-notification-sent/{notificationSent}', [NotificationSentController::class, 'updateNotificationSent']);
 Route::delete('/delete-notification-sent/{notificationSent}', [NotificationSentController::class, 'deleteNotificationSent']);

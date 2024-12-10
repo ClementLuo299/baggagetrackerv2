@@ -13,5 +13,14 @@
         <input name = "password" type="password" placeholder="password">
         <Button>Login</Button>
     </form>
+
+    <!-- Back Button -->
+    <div style="margin-top: 20px;">
+        <a href="/">
+            <button type="button">Back</button>
+        </a>
+    </div>
 </body>
+
+
 </html>

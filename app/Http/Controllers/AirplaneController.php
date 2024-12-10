@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Airplane;
+use App\Models\Location;
 use Illuminate\Http\Request;
 
 class AirplaneController extends Controller
@@ -11,7 +12,10 @@ class AirplaneController extends Controller
         $incomingFields = $request->validate([
             'registration_no' => 'required',
             'type' => 'required',
-            'capacity' => 'required'
+            'capacity' => 'required',
+            'coordinates' => 'nullable',
+            'airport' => 'nullable',
+            'coordinates' => 'nullable'
         ]);
 
         $incomingFields['registration_no'] = strip_tags($incomingFields['registration_no']);
@@ -19,7 +23,21 @@ class AirplaneController extends Controller
         $incomingFields['capacity'] = strip_tags($incomingFields['capacity']);
         //Temp set capacity
         $incomingFields['payload'] = 0;
-        Airplane::create($incomingFields);
+
+        $airplane = Airplane::create([
+            'registration_no' => $incomingFields['registration_no'],
+            'type' => $incomingFields['type'],
+            'capacity' => $incomingFields['capacity'],
+            'payload' =>$incomingFields['payload'],
+            'coordinates' => $incomingFields['coordinates'],
+            'airport' => $incomingFields['airport'] ?? ''
+        ]);
+        Location::create([
+            'name' => $incomingFields['registration_no'],
+            'coordinates' => $incomingFields['coordinates'],
+            'airplane' => $incomingFields['registration_no']
+        ]);
+        
         return redirect('/employees');
     }
 

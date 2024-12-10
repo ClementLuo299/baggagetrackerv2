@@ -8,6 +8,56 @@
 <body>
     @auth
 
+    @role('Customer')
+
+        <!-- Manage Notifications -->
+        <div>
+            <div>
+                <h2>Your Bags</h2>
+            </div>
+    
+            <div>
+                @foreach($customerbaggages as $customerbaggage)
+                <div style="border:3px solid black; padding:10px; margin: 10px">
+                    <h4>Tracker ID: {{$customerbaggage->tracker_id}}</h4>
+                    @foreach($locationUpdates as $locationupdate)
+                        @if($locationupdate->tracker_id == $customerbaggage->tracker_id)
+                        <div>
+                            Time: {{$locationupdate['time']}},
+                            Location: {{$locationupdate['location_name']}}
+                        </div>
+                        @endif
+                    @endforeach
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <h2>Your Notifications</h2>
+            </div>
+    
+            <div>
+                @foreach($customernotifications as $notification)
+                <div style="border:3px solid black; padding:10px; margin: 10px">
+                    <h4>Notification ID: {{$notification->notification_id}}</h4>
+                    Content: {{$notification['content']}},
+                    Notification Time: {{$notification['notification_time']}}
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Logout button -->
+        <form action="/logout" method ="POST">
+            @csrf
+            <Button>Logout</Button>
+        </form>
+    @endrole
+
+    @can('employee')
+
     <!-- Logout button -->
     <form action="/logout" method ="POST">
         @csrf
@@ -42,8 +92,7 @@
             @if($user->customer)
             <div style="border:3px solid black; padding:10px; margin: 10px">
                 <div>
-                    <h4>{{$user->fname}}</h4>
-                    <h4>{{$user->lname}}</h4>
+                    <h4>{{$user->fname}} {{$user->lname}}</h4>
                 </div>
                 Passport No: {{$user->customer->passport_no}},
                 Country Citizenship: {{$user->customer->country_citizenship}},
@@ -66,7 +115,9 @@
             @endforeach
         </div>
     </div>
+    @endcan
 
+    @can('employee')
     <!-- Manage Itinerary -->
     <div>
         <div>
@@ -77,7 +128,19 @@
             <form action="/register-itinerary" method="POST">
                 @csrf
                 <input type="text" name="booking_id" placeholder="customer booking id">
-                <input type="text" name="passport_no" placeholder="customer passport no">
+
+                <!-- Dropdown for selecting passport number -->
+                Passport No:
+                <select name="passport_no" id="passport_no">
+                    @foreach($users as $user)
+                            @if ($user->customer)
+                                <option value="{{ $user->passport_no }}">
+                                    {{ $user->customer->passport_no }} {{ $user->fname }} {{ $user->lname }}
+                                </option>
+                            @endif
+                    @endforeach
+                </select>
+
                 <button>Add Itinerary</button>
             </form>
         </div>
@@ -99,53 +162,9 @@
         </div>
 
     </div>
+    @endcan
 
-    <!-- Manage Employees -->
-    <div>
-        <div>
-            <h2>Manage Employees</h2>
-        </div>
-
-        <div>
-            <form action="/register-employee" method="POST">
-                @csrf
-                <input type="text" name="name" placeholder="username">
-                <input type="text" name="password" placeholder="password">
-                <input type="text" name="fname" placeholder="first name">
-                <input type="text" name="lname" placeholder="last name">
-                <input type="text" name="role" placeholder="employee role">
-                <input type="text" name="airline" placeholder="employee airline">
-
-                <button>Add Employee</button>
-            </form>
-        </div>
-
-        <div>
-            <h3>Employees</h3>
-            @foreach($users as $user)
-                @if($user->employee)
-                <div style="border:3px solid black; padding:10px; margin: 10px">
-                    <h5>{{$user->fname}} {{$user->lname}}</h5>
-                    Role: {{$user->employee->role}},
-                    Airline: {{$user->employee->airline}}
-
-                    <form action="/edit-employee/{{$user->id}}" method="POST">
-                        @csrf
-                        <button>Edit</button>
-                    </form>
-                    <form action="/delete-employee/{{$user->id}}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button>Delete</button>
-                    </form>
-                </div>
-                @endif
-            @endforeach
-        </div>
-
-    </div>
-
-
+    @can('admin')
     <!-- Manage Airlines -->
     <div>
         <div>
@@ -182,8 +201,69 @@
             @endforeach
         </div>
     </div>
+    @endcan
 
+    @can('executive')
+    <!-- Manage Employees -->
+    <div>
+        <div>
+            <h2>Manage Employees</h2>
+        </div>
 
+        <div>
+            <form action="/register-employee" method="POST">
+                @csrf
+                <input type="text" name="name" placeholder="username">
+                <input type="text" name="password" placeholder="password">
+                <input type="text" name="fname" placeholder="first name">
+                <input type="text" name="lname" placeholder="last name">
+                <input type="text" name="role" placeholder="employee role">
+                <input placeholder="employee airline">
+                Airline:
+                <select name = "airline" id = "name">
+                    @foreach($airlines as $air)
+                        <option value = "{{$air->name}}">{{$air->name}}</option>
+                    @endforeach
+                </select>
+                Role Type:
+                <select name="type" id="type">
+                    <option value="executive">Executive</option>
+                    <option value="employee">Employee</option>
+                  </select>
+                <button>Send</button>
+
+                <button>Add Employee</button>
+            </form>
+        </div>
+
+        <div>
+            <h3>Employees</h3>
+            @foreach($users as $user)
+                @if($user->employee)
+                <div style="border:3px solid black; padding:10px; margin: 10px">
+                    <h4>{{$user->fname}} {{$user->lname}}</h4>
+                    Job Type: {{$user->employee->role}},
+                    Airline: {{$user->employee->airline}}
+                    Role: {{$user->roles->pluck('name')[0] ?? ''}}
+
+                    <form action="/edit-employee/{{$user->id}}" method="POST">
+                        @csrf
+                        <button>Edit</button>
+                    </form>
+                    <form action="/delete-employee/{{$user->id}}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button>Delete</button>
+                    </form>
+                </div>
+                @endif
+            @endforeach
+        </div>
+
+    </div>
+    @endcan
+
+    @can('admin')
     <!-- Manage Airports -->
     <div>
         <div>
@@ -222,7 +302,9 @@
             @endforeach
         </div>
     </div>
+    @endcan
 
+    @can('employee')
     <!-- Manage Locations -->
     <div>
         <div>
@@ -266,7 +348,9 @@
         </div>
 
     </div>
-    
+    @endcan
+
+    @can('admin')
     <!-- Manage Airplanes -->
     <div>
         <div>
@@ -279,7 +363,15 @@
                 <input type = "text" name = "registration_no" placeholder="aircraft registration">
                 <input type = "text" name = "type" placeholder="aircraft type">
                 <input type = "text" name = "capacity" placeholder="max capacity">
+                Airline:
+                <select name = "airline" id = "name">
+                    @foreach($airlines as $air)
+                        <option value = "{{$air->name}}">{{$air->name}}</option>
+                    @endforeach
+                </select>
+                <input type = "text" name = "coordinates" placeholder="coordinates">
                 <button>Add Airplane</button>
+
             </form>
         </div>
 
@@ -304,7 +396,9 @@
             @endforeach
         </div>
     </div>
-
+    @endcan
+    
+    @can('executive')
     <!-- Manage Flights -->
     <div>
         <div>
@@ -349,7 +443,10 @@
         </div>
 
     </div>
+    @endcan
 
+
+    @can('employee')
     <!-- Manage Itinerary Flights -->
     <div>
         <div>
@@ -402,7 +499,9 @@
             </div>
             @endforeach
         </div>
+    @endcan
 
+    @can('employee')
     <!-- Manage Baggage -->
     <div>
         <div>
@@ -462,7 +561,9 @@
         </div>
 
     </div>
-
+    @endcan
+    
+    @can('employee')
     <!-- Manage Location Updates -->
     <div>
         <div>
@@ -473,9 +574,20 @@
         <div>
             <form action="/register-location-update" method="POST">
                 @csrf
+                @method('POST')
                 <input type="datetime-local" name="time" placeholder="Time of update">
-                <input type="text" name="tracker_id" placeholder="Tracker ID">
-                <input type="text" name="location_name" placeholder="Location Name">
+                Tracker ID:
+                <select name="tracker_id" id="tracker_id">
+                    @foreach($baggages as $baggage)
+                    <option value = {{$baggage->tracker_id}}>{{$baggage->passport_no}} {{$baggage->tracker_id}}</option>
+                    @endforeach
+                </select>
+                Location:
+                <select name="location_name" id="location_name">
+                    @foreach($locations as $location)
+                    <option value = "{{$location->name}}";>{{$location->name}}</option>
+                    @endforeach
+                </select>
                 <button>Add Location Update</button>
             </form>
         </div>
@@ -505,8 +617,9 @@
             @endforeach
         </div>
     </div>
+    @endcan
 
-
+    @can('employee')
     <!-- Manage Incidents -->
     <div>
         <div>
@@ -578,7 +691,7 @@
         </div>
 
     </div>
-
+    
     <!-- Manage Baggage Incidents -->
     <div>
         <div>
@@ -617,7 +730,9 @@
         </div>
 
     </div>
+    @endcan
 
+    @can('executive')
     <!-- Manage Incident Employees -->
     <div>
         <div>
@@ -658,7 +773,9 @@
             @endforeach
         </div>
     </div>
+    @endcan
 
+    @can('employee')
     <!-- Manage Notification Subject -->
     <div>
         <div>
@@ -700,7 +817,6 @@
         </div>
     </div>
 
-
     <!-- Manage Notifications -->
     <div>
         <div>
@@ -713,6 +829,12 @@
                 <input type="text" name="notification_id" placeholder="notification id">
                 <input type="text" name="content" placeholder="notification content">
                 <input type="datetime-local" name="notification_time" placeholder="time of notification">
+                About:
+                <select name="tracker_id" id="tracker_id">
+                    @foreach($baggages as $baggage)
+                    <option value = {{$baggage->tracker_id}}>{{$baggage->passport_no}}: {{$baggage->tracker_id}}</option>
+                    @endforeach
+                </select>
                 <button>Add Notification</button>
             </form>
         </div>
@@ -729,6 +851,19 @@
                     @csrf
                     <button>Edit</button>
                 </form>
+
+                <form action="/register-notification-sent/{{$notification->notification_id}}" method="POST">
+                    @csrf
+                    @method('POST')
+                    Send To:
+                    <select name="recipient" id="recipient">
+                        @foreach($users as $user)
+                        <option value = {{$user->id}}>{{$user->fname}} {{$user->lname}}</option>
+                        @endforeach
+                    </select>
+                    <button>Send</button>
+                </form>
+
                 <form action="/delete-notification/{{$notification->notification_id}}" method="POST">
                     @csrf
                     @method('DELETE')
@@ -782,11 +917,7 @@
             @endforeach
         </div>
     </div>
-
-    <!-- Manage Executives -->
-    <div>
-        <h2>Manage Executives</h2>
-    </div>
+    @endcan
 
     @else
 

@@ -11,4 +11,8 @@ class Airline extends Model
     public $incrementing = false; 
     public $timestamps = false;
     //
+
+    public function airplane(){
+        return $this->hasMany(Airplane::class,'name','airline');
+    }
 }

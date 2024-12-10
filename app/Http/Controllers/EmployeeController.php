@@ -17,7 +17,8 @@ class EmployeeController extends Controller
             'password'=>'required',
             'fname'=>'required',
             'lname'=>'required',
-            'airline'=>'nullable'
+            'airline'=>'nullable',
+            'type'=>'required'
         ]);
 
         // Sanitize inputs
@@ -31,8 +32,10 @@ class EmployeeController extends Controller
             'fname' => $incomingFields['fname'],
             'lname' => $incomingFields['lname'],
         ]);
+
+        $user->assignRole($incomingFields['type']);
     
-        $id = DB::getPdo()->lastInsertId();
+        $id = $user->id;
 
         // Create Employee linked to the created User
         Employee::create([

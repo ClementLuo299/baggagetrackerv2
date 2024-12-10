@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Models\NotificationSubject;
 
 class NotificationController extends Controller
 {
@@ -12,15 +13,26 @@ class NotificationController extends Controller
             'notification_id' => 'required',
             'content' => 'required',
             'notification_time' => 'required',
+            'tracker_id' => 'required'
         ]);
 
         $incomingFields['notification_id'] = strip_tags($incomingFields['notification_id']);
         $incomingFields['content'] = strip_tags($incomingFields['content']);
         $incomingFields['notification_time'] = strip_tags($incomingFields['notification_time']);
 
-        Notification::create($incomingFields);
+        Notification::create([
+            'notification_id' => $incomingFields['notification_id'],
+            'content' => $incomingFields['content'],
+            'notification_time' => $incomingFields['notification_time'],
+        ]);
+
+        NotificationSubject::create([
+            'notification_id' => $incomingFields['notification_id'],
+            'tracker_id' => $incomingFields['tracker_id']
+        ]);
+
+        
         return redirect('/employees');
-    //
     }
 
     public function showEditScreen(Notification $notification) {

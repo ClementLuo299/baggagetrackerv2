@@ -15,11 +15,13 @@ class LocationUpdateController extends Controller
 
     $incomingFields['time'] = strip_tags($incomingFields['time']);
     $incomingFields['tracker_id'] = strip_tags($incomingFields['tracker_id']);
-    $incomingFields['location_name'] = strip_tags($incomingFields['location_name']);
 
-    LocationUpdate::create($incomingFields);
+    LocationUpdate::create([
+        'time' => $incomingFields['time'],
+        'tracker_id' => $incomingFields['tracker_id'],
+        'location_name' => $incomingFields['location_name']
+    ]);
     return redirect('/employees');
-    //
     }
 
     public function showEditScreen(LocationUpdate $locationUpdate) {

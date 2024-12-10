@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function logout(){
         Auth::logout();
-        return redirect('/emplogin');
+        return redirect('/');
     }
 
     public function login(Request $request){
@@ -20,6 +21,18 @@ class UserController extends Controller
         ]);
 
         if(Auth::attempt(['name' => $incomingFields['name'], 'password' => $incomingFields['password']])){
+            $request->session()->regenerate();
+        }
+
+        return redirect('/employees');
+    }
+
+    public function customerLogin(Request $request){
+        $incomingFields = $request->validate([
+            'name' => 'required'
+        ]);
+
+        if(Auth::attempt(['name' => $incomingFields['name'], 'password' => $incomingFields['name']])){
             $request->session()->regenerate();
         }
 

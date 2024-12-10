@@ -6,12 +6,18 @@
     <title>Baggage Tracker</title>
 </head>
 <body>
-    <h2>Login</h2>
-    <form action="/" method="POST">
+    <h2>Customer Login</h2>
+    <form action="/login/submit" method="POST">
         @csrf
-        <input name = "userID" type="text" placeholder="name">
-        <input name = "password" type="password" placeholder="password">
-        <Button>Register</Button>
+        <input name = "name" type="text" placeholder="passport number">
+        <Button>Login</Button>
     </form>
+
+    <!-- Back Button -->
+    <div style="margin-top: 20px;">
+        <a href="/">
+            <button type="button">Back</button>
+        </a>
+    </div>
 </body>
 </html>
